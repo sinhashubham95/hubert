@@ -1,42 +1,45 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image, KeyboardAvoidingView} from 'react-native';
 
 import * as colors from '../constants/colors';
+import * as constants from '../constants';
 import logo from '../assets/logo.png';
 import Input from '../components/input';
 import Button from '../components/button';
 
 export default () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const states = constants.LOGIN_FORM.map(({defaultValue}) =>
+    useState(defaultValue),
+  );
 
   const handleChange = setValue => value => setValue(value);
 
   const onSubmit = () => {
-    console.log(email, password);
+    console.log('login attempt');
   };
 
+  const renderFormInput = ({value, updateValue, ...otherProps}, index) => (
+    <Input
+      value={states[index][0]}
+      onChangeText={handleChange(states[index][1])}
+      {...otherProps}
+    />
+  );
+
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Image source={logo} style={styles.logo} />
       <View style={styles.form}>
-        <Input
-          placeholder="Email"
-          value={email}
-          onChangeText={handleChange(setEmail)}
-        />
-        <Input
-          placeholder="Password"
-          value={password}
-          onChangeText={handleChange(setPassword)}
-        />
+        {constants.LOGIN_FORM.map(renderFormInput)}
         <Button
-          disabled={!email || !password}
+          disabled={states
+            .map(state => state[0])
+            .reduce((result, value) => result || !value, false)}
           label="Log In"
           onPress={onSubmit}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -46,13 +49,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
+    paddingHorizontal: 16,
   },
   logo: {
     flex: 1,
     width: '100%',
     resizeMode: 'contain',
     alignSelf: 'center',
+    marginBottom: 64,
   },
   form: {
     flex: 1,
