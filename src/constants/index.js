@@ -1,10 +1,9 @@
 export const LOGIN_FORM = [
   {
-    key: 'email',
-    placeholder: 'Email',
-    autoCompleteType: 'email',
-    keyboardType: 'email-address',
-    textContentType: 'emailAddress',
+    key: 'username',
+    placeholder: 'Username',
+    autoCompleteType: 'username',
+    textContentType: 'username',
     autoCapitalize: 'none',
     defaultValue: '',
   },
@@ -18,3 +17,5 @@ export const LOGIN_FORM = [
     defaultValue: '',
   },
 ];
+
+export const AUTH_SERVICE_KEY = 'AUTH_SERVICE';
