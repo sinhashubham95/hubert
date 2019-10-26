@@ -19,3 +19,4 @@ export const LOGIN_FORM = [
 ];
 
 export const AUTH_SERVICE_KEY = 'AUTH_SERVICE';
+export const USER_INFORMATION_SERVICE_KEY = 'USER_INFORMATION_SERVICE';

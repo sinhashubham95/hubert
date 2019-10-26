@@ -22,7 +22,6 @@ class AuthService extends Service {
   async get(username, password) {
     const currentTime = Date.now();
     const value = await this.cachedData;
-    console.log(value);
     if (
       value &&
       typeof value.expiryTime === 'number' &&
