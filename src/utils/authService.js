@@ -59,7 +59,7 @@ class AuthService extends Service {
       password,
       token: response.data.access_token,
       tokenType: response.data.token_type,
-      expiryTime: currentTime + response.data.expires_in,
+      expiryTime: currentTime + response.data.expires_in * 1000,
     });
     this.__setDefaults();
     return this.data;

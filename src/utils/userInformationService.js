@@ -6,7 +6,13 @@ import * as constants from '../constants';
 class UserInformationService extends Service {
   constructor() {
     super(
-      {name: '', email: '', profilePhoto: ''},
+      {
+        name: '',
+        email: '',
+        profilePhoto: '',
+        clients: [],
+        currentClientIndex: 0,
+      },
       constants.USER_INFORMATION_SERVICE_KEY,
     );
   }
@@ -17,16 +23,39 @@ class UserInformationService extends Service {
       await (this.data = value);
       return value;
     }
-    const response = await Axios.get('/Usuario');
-    if (response.status !== 200) {
+    const responses = await Axios.all([
+      Axios.get('/Usuario'),
+      Axios.get('/Locacao/Proprietario'),
+    ]);
+    if (
+      responses.length !== 2 ||
+      responses[0].status !== 200 ||
+      responses[1].status !== 200
+    ) {
       throw new Error('Error fetching user information.');
     }
+    const clients = responses[1].data.Dados || [];
     await (this.data = {
-      name: response.data.Dados.NomeUsuario,
-      email: response.data.Dados.Email,
-      profilePhoto: response.data.Dados.UrlFoto,
+      name: responses[0].data.Dados.NomeUsuario,
+      email: responses[0].data.Dados.Email,
+      profilePhoto: responses[0].data.Dados.UrlFoto,
+      clients,
+      currentClientIndex: clients.length ? 0 : -1,
     });
     return this.data;
+  }
+
+  updateClient(index) {
+    let data = this.data;
+    if (data == null) {
+      return;
+    }
+    data = Object.assign({}, data, {
+      currentClientIndex: index,
+    });
+    (async () => {
+      await (this.data = data);
+    })();
   }
 }
 

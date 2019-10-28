@@ -1,16 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import {View, StyleSheet, Image, Text, Picker} from 'react-native';
 import Snackbar from 'react-native-snackbar';
+import Button from 'react-native-really-awesome-button';
 
+import AuthService from '../utils/authService';
 import UserInformationService from '../utils/userInformationService';
 import Loading from '../components/loading';
-import Button from '../components/footerButton';
+import LineSeparator from '../components/lineSeparator';
 import * as colors from '../constants/colors';
 import * as constants from '../constants';
 
 export default props => {
   const [init, setInit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const buttonStates = constants.SIDE_MENU_BUTTONS.map(() => useState(false));
+  const [client, setClient] = useState('');
 
   const userInfoEffect = () => {
     if (init || loading) {
@@ -20,6 +24,13 @@ export default props => {
       setLoading(true);
       try {
         await UserInformationService.get();
+        if (UserInformationService.data.currentClientIndex >= 0) {
+          setClient(
+            UserInformationService.data.clients[
+              UserInformationService.data.currentClientIndex
+            ].NomeProprietario,
+          );
+        }
         setInit(true);
       } catch (e) {
         Snackbar.show({
@@ -32,12 +43,64 @@ export default props => {
   };
   useEffect(userInfoEffect);
 
-  const onLogout = () => {
-    props.navigation.navigate(constants.NAVIGATION_LOGIN);
+  const onButtonPress = (key, index) => next => {
+    if (key === constants.CHANGE_PASSWORD) {
+      // functionality is not yet available
+      buttonStates[index][1](true);
+      Snackbar.show({
+        title: 'This functionality will be available soon.',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+      next();
+      buttonStates[index][1](false);
+      return;
+    }
+    (async () => {
+      buttonStates[index][1](true);
+      try {
+        props.navigation.navigate(constants.NAVIGATION_LOGIN);
+        await UserInformationService.clear(key);
+        await AuthService.clear(key);
+      } catch (e) {
+        Snackbar.show({
+          title: e.message,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+        buttonStates[index][1](false);
+        next();
+      }
+    })();
   };
 
+  const onClientChange = (clientName, index) => {
+    setClient(clientName);
+    UserInformationService.updateClient(index);
+  };
+
+  const renderButton = ({label, key, textStyle, ...otherProps}, index) => (
+    <View key={key}>
+      <Button
+        {...otherProps}
+        onPress={onButtonPress(key, index)}
+        progress={buttonStates[index][0]}>
+        <Text style={textStyle}>{label}</Text>
+      </Button>
+    </View>
+  );
+
+  const renderClient = clientData => (
+    <Picker.Item
+      label={clientData.NomeProprietario}
+      value={clientData.NomeProprietario}
+    />
+  );
+
   if (!init || loading) {
-    return <Loading />;
+    return (
+      <View>
+        <Loading />
+      </View>
+    );
   }
 
   return (
@@ -57,13 +120,18 @@ export default props => {
         <Text style={styles.name}>{UserInformationService.data.name}</Text>
       </View>
       <View style={styles.buttons}>
-        <View style={styles.button}>
-          <Button disabled label="Change Password" />
-        </View>
-        <View style={styles.button}>
-          <Button label="Logout" onPress={onLogout} />
-        </View>
+        {constants.SIDE_MENU_BUTTONS.map(renderButton)}
       </View>
+      <LineSeparator />
+      <View style={styles.selections}>
+        <Picker
+          selectedValue={client}
+          onValueChange={onClientChange}
+          style={styles.selection}>
+          {UserInformationService.data.clients.map(renderClient)}
+        </Picker>
+      </View>
+      <LineSeparator />
     </View>
   );
 };
@@ -103,10 +171,17 @@ const styles = StyleSheet.create({
   },
   buttons: {
     width: '100%',
-    flexDirection: 'row',
-  },
-  button: {
-    width: '50%',
     paddingHorizontal: 16,
+    marginVertical: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  selections: {
+    width: '100%',
+    paddingHorizontal: 16,
+    marginVertical: 8,
+  },
+  selection: {
+    width: '100%',
   },
 });
