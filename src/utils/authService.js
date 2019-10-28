@@ -31,6 +31,12 @@ class AuthService extends Service {
       this.__setDefaults();
       return value;
     }
+    if (!username) {
+      throw new Error('Username is required.');
+    }
+    if (!password) {
+      throw new Error('Password is required.');
+    }
     const response = await Axios.post(
       'https://api-test.hubert.com.br/token',
       QS.stringify({

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,17 +12,33 @@ import * as colors from '../constants/colors';
 import * as constants from '../constants';
 import logo from '../assets/logo.png';
 import Input from '../components/input';
-import Button from '../components/button';
+import Button from '../components/footerButton';
 import Loading from '../components/loading';
 
 import authService from '../utils/authService';
 
-export default () => {
+export default props => {
+  const [init, setInit] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const states = constants.LOGIN_FORM.map(({defaultValue}) =>
     useState(defaultValue),
   );
+
+  const authEffect = () => {
+    if (init) {
+      return;
+    }
+    (async () => {
+      try {
+        await authService.get();
+        props.navigation.navigate(constants.NAVIGATION_DASHBOARD);
+      } catch (e) {
+        setInit(true);
+      }
+    })();
+  };
+  useEffect(authEffect);
 
   const handleChange = setValue => value => setValue(value);
 
@@ -31,13 +47,14 @@ export default () => {
     setLoading(true);
     try {
       await authService.get(states[0][0], states[1][0]);
+      props.navigation.navigate(constants.NAVIGATION_DASHBOARD);
     } catch (e) {
       Snackbar.show({
         title: e.message,
         duration: Snackbar.LENGTH_SHORT,
       });
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const renderFormInput = ({value, updateValue, ...otherProps}, index) => (
@@ -47,6 +64,10 @@ export default () => {
       {...otherProps}
     />
   );
+
+  if (!init) {
+    return null;
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
