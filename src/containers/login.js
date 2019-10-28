@@ -26,7 +26,7 @@ export default props => {
   );
 
   const authEffect = () => {
-    if (init) {
+    if (init || loading) {
       return;
     }
     (async () => {

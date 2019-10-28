@@ -90,6 +90,7 @@ export default props => {
 
   const renderClient = clientData => (
     <Picker.Item
+      key={clientData.CodProprietario}
       label={clientData.NomeProprietario}
       value={clientData.NomeProprietario}
     />

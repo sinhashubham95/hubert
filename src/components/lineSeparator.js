@@ -8,7 +8,7 @@ export default () => <View style={styles.container} />;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: 2 * StyleSheet.hairlineWidth,
     borderColor: colors.LINE_SEPARATOR_COLOR,
   },
 });
