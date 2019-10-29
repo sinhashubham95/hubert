@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Image, Text, Picker} from 'react-native';
+import {View, StyleSheet, Image, Text, Picker, Switch} from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import Button from 'react-native-really-awesome-button';
 
@@ -133,6 +133,15 @@ export default props => {
         </Picker>
       </View>
       <LineSeparator />
+      <View style={styles.switch}>
+        <View style={styles.switchDetails}>
+          <Text style={styles.switchPrimaryDetail}>Dark Theme</Text>
+          <Text style={styles.switchSecondaryDetail}>
+            Turn background colors dark
+          </Text>
+        </View>
+        <Switch thumbColor={colors.WHITE} trackColor={colors.BACKGROUND_GREY} />
+      </View>
     </View>
   );
 };
@@ -184,5 +193,23 @@ const styles = StyleSheet.create({
   },
   selection: {
     width: '100%',
+  },
+  switch: {
+    width: '100%',
+    paddingHorizontal: 16,
+    marginVertical: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  switchDetails: {
+    flexDirection: 'column',
+  },
+  switchPrimaryDetail: {
+    fontSize: 16,
+    color: colors.TEXT_BLACK,
+  },
+  switchSecondaryDetail: {
+    fontSize: 12,
+    color: colors.TEXT_BLACK_SECONDARY,
   },
 });

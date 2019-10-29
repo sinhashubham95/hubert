@@ -1,5 +1,8 @@
 import * as colors from './colors';
 
+export const LIGHT_THEME = 'LIGHT';
+export const DARK_THEME = 'DARK';
+
 export const LOGIN_FORM = [
   {
     key: 'username',

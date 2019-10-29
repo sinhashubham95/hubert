@@ -14,4 +14,6 @@ export const BACKGROUND_GREY = 'rgb(239,239,239)';
 
 export const BACKGROUND_SHADOW = 'rgb(224,224,224)';
 
-export const LINE_SEPARATOR_COLOR = 'rgb(184,184,184)'
+export const LINE_SEPARATOR_COLOR = 'rgb(184,184,184)';
+
+export const TEXT_BLACK_SECONDARY = 'rgba(0,0,0,0.54)';
