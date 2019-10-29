@@ -16,7 +16,7 @@ const useStyles = theme =>
     headerContainer: {
       flex: 0,
       elevation: 5,
-      backgroundColor: colors.THEME[theme].headerBackgroundColor,
+      backgroundColor: theme.headerBackgroundColor,
     },
     headerBaseContainer: {
       height: 56,
