@@ -3,19 +3,25 @@ import {TextInput, StyleSheet} from 'react-native';
 
 import * as colors from '../constants/colors';
 
-export default ({style, ...otherProps}) => (
-  <TextInput
-    selectionColor={colors.DODGER_BLUE}
-    style={[styles.input, style]}
-    {...otherProps}
-  />
-);
+export default ({style, theme, ...otherProps}) => {
+  const styles = useStyles(theme);
+  return (
+    <TextInput
+      selectionColor={colors.THEME[theme].selectionColor}
+      placeholderTextColor={colors.THEME[theme].textSecondaryColor}
+      style={[styles.input, style]}
+      {...otherProps}
+    />
+  );
+};
 
-const styles = StyleSheet.create({
-  input: {
-    height: 48,
-    borderColor: colors.SILVER,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    marginBottom: 24,
-  },
-});
+const useStyles = theme =>
+  StyleSheet.create({
+    input: {
+      height: 48,
+      borderColor: colors.THEME[theme].borderColor,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      marginBottom: 24,
+      color: colors.THEME[theme].textPrimaryColor,
+    },
+  });

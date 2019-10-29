@@ -25,7 +25,7 @@ class AuthService extends Service {
     if (
       value &&
       typeof value.expiryTime === 'number' &&
-      currentTime > value.expiryTime
+      currentTime < value.expiryTime
     ) {
       await (this.data = value);
       this.__setDefaults();

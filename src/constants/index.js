@@ -1,7 +1,7 @@
 import * as colors from './colors';
 
-export const LIGHT_THEME = 'LIGHT';
-export const DARK_THEME = 'DARK';
+export const LIGHT_THEME = 'light';
+export const DARK_THEME = 'dark';
 
 export const LOGIN_FORM = [
   {
@@ -25,18 +25,20 @@ export const LOGIN_FORM = [
 
 export const CHANGE_PASSWORD = 'changePassword';
 export const LOGOUT = 'logout';
-export const SIDE_MENU_BUTTONS = [
+export const SIDE_MENU_BUTTONS = theme => [
   {
     key: CHANGE_PASSWORD,
     label: 'Change Password',
     width: 120,
     height: 32,
-    backgroundColor: colors.DODGER_BLUE,
-    backgroundShadow: colors.BACKGROUND_SHADOW,
+    backgroundColor: colors.THEME[theme].buttonBackgroundColorPrimary,
+    backgroundShadow: colors.THEME[theme].backgroundShadow,
     raiseLevel: 2,
     progressLoadingTime: 500,
+    type: 'primary',
+    progress: true,
     textStyle: {
-      color: colors.WHITE,
+      color: colors.THEME[theme].buttonTextColorPrimary,
       fontSize: 12,
     },
   },
@@ -45,12 +47,14 @@ export const SIDE_MENU_BUTTONS = [
     label: 'Logout',
     width: 120,
     height: 32,
-    backgroundColor: colors.BACKGROUND_GREY,
-    backgroundShadow: colors.BACKGROUND_SHADOW,
+    backgroundColor: colors.THEME[theme].buttonBackgroundColorSecondary,
+    backgroundShadow: colors.THEME[theme].backgroundShadow,
     raiseLevel: 2,
     progressLoadingTime: 500,
+    progress: true,
+    type: 'primary',
     textStyle: {
-      color: colors.TEXT_BLACK,
+      color: colors.THEME[theme].buttonTextColorSecondary,
       fontSize: 12,
     },
   },
