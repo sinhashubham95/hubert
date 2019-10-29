@@ -1,79 +1,75 @@
-import React from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
-import {useSafeArea} from 'react-native-safe-area-context';
+import React, {Component} from 'react';
+import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import ConnectionStatusBar from './connectionStatusBar';
 import * as colors from '../constants/colors';
 import logo from '../assets/logo.png';
 
-const iconStyle = {
+const iconStyle = theme => ({
   size: 25,
-  color: '#fff',
-};
+  color: colors.THEME[theme].headerTextColor,
+});
 
-const styles = {
-  headerContainer: {
-    flex: 0,
-    elevation: 5,
-    backgroundColor: colors.DODGER_BLUE,
-  },
-  headerBaseContainer: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  leftHeader: {
-    flex: 0,
-    flexDirection: 'row',
-  },
-  centerHeader: {
-    flex: 1,
-  },
-  logo: {
-    flex: 1,
-    width: '90%',
-    resizeMode: 'contain',
-    tintColor: colors.WHITE,
-  },
-  navMenuButton: {
-    padding: 8,
-  },
-};
+const useStyles = theme =>
+  StyleSheet.create({
+    headerContainer: {
+      flex: 0,
+      elevation: 5,
+      backgroundColor: colors.THEME[theme].headerBackgroundColor,
+    },
+    headerBaseContainer: {
+      height: 56,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    leftHeader: {
+      flex: 0,
+      flexDirection: 'row',
+    },
+    centerHeader: {
+      flex: 1,
+    },
+    logo: {
+      flex: 1,
+      width: '90%',
+      resizeMode: 'contain',
+      tintColor: colors.THEME[theme].headerTextColor,
+    },
+    navMenuButton: {
+      padding: 8,
+    },
+  });
 
-export default props => {
-  const insets = useSafeArea();
-  const pad = {
-    paddingTop: insets.top,
-    paddingBottom: insets.bottom,
-    paddingLeft: insets.left,
-    paddingRight: insets.right,
+class Header extends Component {
+  onBack = () => {
+    this.props.navigation.goBack();
   };
 
-  const onBack = () => {
-    props.navigation.goBack();
+  onNavMenu = () => {
+    this.props.navigation.openDrawer();
   };
 
-  const onNavMenu = () => {
-    props.navigation.openDrawer();
+  renderCenterHeader = () => {
+    const {theme} = this.props;
+    const styles = useStyles(theme);
+    return (
+      <View style={styles.centerHeader}>
+        <Image source={logo} style={styles.logo} />
+      </View>
+    );
   };
 
-  const renderCenterHeader = () => (
-    <View style={styles.centerHeader}>
-      <Image source={logo} style={styles.logo} />
-    </View>
-  );
-
-  const renderLeftHeader = () => {
-    const {dismissBehavior, onDismissCallback, dismissIcon} = props;
-
+  renderLeftHeader = () => {
+    const {dismissBehavior, onDismissCallback, dismissIcon, theme} = this.props;
+    const styles = useStyles(theme);
     return (
       <View style={styles.leftHeader}>
         {dismissBehavior === 'back' && (
-          <TouchableOpacity onPress={onBack}>
+          <TouchableOpacity onPress={this.onBack}>
             <Icon
               name={dismissIcon}
-              {...iconStyle}
+              {...iconStyle(theme)}
               style={styles.navMenuButton}
             />
           </TouchableOpacity>
@@ -82,27 +78,37 @@ export default props => {
           <TouchableOpacity onPress={onDismissCallback}>
             <Icon
               name={dismissIcon}
-              {...iconStyle}
+              {...iconStyle(theme)}
               style={styles.navMenuButton}
             />
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={onNavMenu}>
-          <Icon name="menu" {...iconStyle} style={styles.navMenuButton} />
+        <TouchableOpacity onPress={this.onNavMenu}>
+          <Icon
+            name="menu"
+            {...iconStyle(theme)}
+            style={styles.navMenuButton}
+          />
         </TouchableOpacity>
       </View>
     );
   };
 
-  return (
-    <View flex={0}>
-      <View style={[styles.headerContainer, pad]}>
-        <View style={styles.headerBaseContainer}>
-          {renderLeftHeader()}
-          {renderCenterHeader()}
+  render() {
+    const {theme} = this.props;
+    const styles = useStyles(theme);
+    return (
+      <View flex={0}>
+        <View style={styles.headerContainer}>
+          <View style={styles.headerBaseContainer}>
+            {this.renderLeftHeader()}
+            {this.renderCenterHeader()}
+          </View>
         </View>
+        <ConnectionStatusBar />
       </View>
-      <ConnectionStatusBar />
-    </View>
-  );
-};
+    );
+  }
+}
+
+export default Header;

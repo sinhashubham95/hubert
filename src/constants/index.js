@@ -1,5 +1,3 @@
-import * as colors from './colors';
-
 export const LIGHT_THEME = 'light';
 export const DARK_THEME = 'dark';
 
@@ -11,6 +9,7 @@ export const LOGIN_FORM = [
     textContentType: 'username',
     autoCapitalize: 'none',
     defaultValue: '',
+    mode: 'outlined',
   },
   {
     key: 'password',
@@ -20,42 +19,39 @@ export const LOGIN_FORM = [
     secureTextEntry: true,
     autoCapitalize: 'none',
     defaultValue: '',
+    mode: 'outlined',
   },
 ];
 
 export const CHANGE_PASSWORD = 'changePassword';
 export const LOGOUT = 'logout';
-export const SIDE_MENU_BUTTONS = theme => [
+export const SIDE_MENU_BUTTONS = [
   {
     key: CHANGE_PASSWORD,
     label: 'Change Password',
-    width: 120,
-    height: 32,
-    backgroundColor: colors.THEME[theme].buttonBackgroundColorPrimary,
-    backgroundShadow: colors.THEME[theme].backgroundShadow,
-    raiseLevel: 2,
-    progressLoadingTime: 500,
-    type: 'primary',
-    progress: true,
-    textStyle: {
-      color: colors.THEME[theme].buttonTextColorPrimary,
-      fontSize: 12,
+    mode: 'contained',
+    compact: true,
+    uppercase: false,
+    labelStyle: {
+      fontSize: 10,
+    },
+    contentStyle: {
+      width: 120,
+      height: 32,
     },
   },
   {
     key: LOGOUT,
     label: 'Logout',
-    width: 120,
-    height: 32,
-    backgroundColor: colors.THEME[theme].buttonBackgroundColorSecondary,
-    backgroundShadow: colors.THEME[theme].backgroundShadow,
-    raiseLevel: 2,
-    progressLoadingTime: 500,
-    progress: true,
-    type: 'primary',
-    textStyle: {
-      color: colors.THEME[theme].buttonTextColorSecondary,
-      fontSize: 12,
+    mode: 'outlined',
+    compact: true,
+    uppercase: false,
+    labelStyle: {
+      fontSize: 10,
+    },
+    contentStyle: {
+      width: 120,
+      height: 32,
     },
   },
 ];

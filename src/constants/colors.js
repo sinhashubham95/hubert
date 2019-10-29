@@ -36,6 +36,9 @@ export const THEME = {
     textSecondaryColor: 'rgb(170,170,170)',
     borderColor: 'rgba(151, 151, 151, 0.6)',
     backgroundShadow: 'rgb(224,224,224)',
+    lineSeparatorColor: 'rgb(184,184,184)',
+    headerBackgroundColor: 'rgb(51,129,241)',
+    headerTextColor: 'rgb(165,228,251)',
     ...DEFAULT_STYLE,
   },
   [constants.DARK_THEME]: {
@@ -46,6 +49,9 @@ export const THEME = {
     borderColor: 'rgb(52,51,56)',
     selectionColor: 'rgb(51,129,241)',
     backgroundShadow: 'rgb(23,22,27)',
+    lineSeparatorColor: 'rgb(34,33,39)',
+    headerBackgroundColor: 'rgb(31,30,36)',
+    headerTextColor: 'rgb(212,211,216)',
     ...DEFAULT_STYLE,
   },
 };

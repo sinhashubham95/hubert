@@ -63,9 +63,9 @@ export default class ConnectionStatusBar extends Component {
     }).start();
   };
 
-  connectionChanged = (isConnected) => {
+  connectionChanged = isConnected => {
     if (this.state.isConnected !== isConnected) {
-      this.setState({ isConnected }, () => {
+      this.setState({isConnected}, () => {
         if (this.state.isConnected) {
           this.timeout = setTimeout(() => {
             this.slideUp();

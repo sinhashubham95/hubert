@@ -1,21 +1,30 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Image, Text, Picker, Switch} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Snackbar from 'react-native-snackbar';
-import Button from 'react-native-really-awesome-button';
+
+import {
+  withTheme,
+  Avatar,
+  Title,
+  Headline,
+  Caption,
+  Button,
+  Divider,
+  List,
+  Switch,
+  ActivityIndicator,
+} from 'react-native-paper';
 
 import AuthService from '../utils/authService';
 import UserInformationService from '../utils/userInformationService';
-import Loading from '../components/loading';
-import LineSeparator from '../components/lineSeparator';
-import * as colors from '../constants/colors';
 import * as constants from '../constants';
-import withTheme from '../hoc/withTheme';
 
 class SideMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
+      showClients: false,
       client: '',
     };
   }
@@ -39,15 +48,14 @@ class SideMenu extends Component {
     })();
   }
 
-  onClientChange = (clientName, index) => {
+  onClientChange = (clientName, index) => () => {
     UserInformationService.updateClient(index);
-    this.setState({client: clientName});
+    this.setState({client: clientName, showClients: false});
   };
 
   onButtonPress = key => next => {
     if (key === constants.CHANGE_PASSWORD) {
       this.showError('This functionality will be available soon.')();
-      next();
       return;
     }
     (async () => {
@@ -63,17 +71,14 @@ class SideMenu extends Component {
   };
 
   onThemeChange = value => {
-    const {theme, screenProps} = this.props;
-    if (value) {
-      if (theme !== constants.DARK_THEME) {
-        screenProps.updateTheme(constants.DARK_THEME);
-      }
-    } else {
-      if (theme !== constants.LIGHT_THEME) {
-        screenProps.updateTheme(constants.LIGHT_THEME);
-      }
+    const {screenProps} = this.props;
+    if (value !== screenProps.darkTheme) {
+      screenProps.updateTheme();
     }
   };
+
+  onShowClients = () =>
+    this.setState(({showClients}) => ({showClients: !showClients}));
 
   showError = message => () => {
     Snackbar.show({
@@ -82,74 +87,61 @@ class SideMenu extends Component {
     });
   };
 
-  renderButton = ({label, key, textStyle, ...otherProps}) => (
-    <View key={key}>
-      <Button {...otherProps} onPress={this.onButtonPress(key)}>
-        <Text style={textStyle}>{label}</Text>
-      </Button>
-    </View>
+  renderButton = ({label, key, ...otherProps}) => (
+    <Button key={key} onPress={this.onButtonPress(key)} {...otherProps}>
+      {label}
+    </Button>
   );
 
-  renderClient = clientData => (
-    <Picker.Item
+  renderClient = (clientData, index) => (
+    <List.Item
       key={clientData.CodProprietario}
-      label={clientData.NomeProprietario}
-      value={clientData.NomeProprietario}
+      title={clientData.NomeProprietario}
+      onPress={this.onClientChange(clientData.NomeProprietario, index)}
     />
   );
 
   render() {
-    const {theme} = this.props;
-    const {client, loading} = this.state;
-    const styles = useStyles(theme);
+    const {theme, screenProps} = this.props;
+    const {client, loading, showClients} = this.state;
     if (loading) {
       return (
         <View style={styles.container}>
-          <Loading />
+          <ActivityIndicator size={32} />
         </View>
       );
     }
     return (
-      <View
-        style={styles.container}
-        forceInset={{top: 'always', horizontal: 'never'}}>
+      <View style={styles.container}>
         <View style={styles.header}>
-          <View style={styles.photo}>
-            <Image
-              height="100%"
-              width="100%"
-              resizeMode="center"
-              style={styles.photoImage}
-              source={{uri: UserInformationService.data.profilePhoto}}
-            />
-          </View>
-          <Text style={styles.name}>{UserInformationService.data.name}</Text>
+          <Avatar.Image
+            source={{uri: UserInformationService.data.profilePhoto}}
+            style={styles.photo}
+          />
+          <Headline>{UserInformationService.data.name}</Headline>
         </View>
         <View style={styles.buttons}>
-          {constants.SIDE_MENU_BUTTONS(theme).map(this.renderButton)}
+          {constants.SIDE_MENU_BUTTONS.map(this.renderButton)}
         </View>
-        <LineSeparator />
+        <Divider style={styles.divider} />
         <View style={styles.selections}>
-          <Picker
-            selectedValue={client}
-            onValueChange={this.onClientChange}
-            style={styles.selection}>
+          <List.Accordion
+            title={client}
+            expanded={showClients}
+            onPress={this.onShowClients}>
             {UserInformationService.data.clients.map(this.renderClient)}
-          </Picker>
+          </List.Accordion>
         </View>
-        <LineSeparator />
+        <Divider style={styles.divider} />
         <View style={styles.switch}>
           <View style={styles.switchDetails}>
-            <Text style={styles.switchPrimaryDetail}>Dark Theme</Text>
-            <Text style={styles.switchSecondaryDetail}>
-              Turn background colors dark
-            </Text>
+            <Title>Dark Theme</Title>
+            <Caption>Turn background colors dark</Caption>
           </View>
           <Switch
-            thumbColor={colors.WHITE}
-            trackColor={colors.BACKGROUND_GREY}
-            value={theme === constants.DARK_THEME}
+            value={screenProps.darkTheme}
             onValueChange={this.onThemeChange}
+            color={theme.primary}
           />
         </View>
       </View>
@@ -157,74 +149,49 @@ class SideMenu extends Component {
   }
 }
 
-const useStyles = theme =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      width: '100%',
-      height: '100%',
-      alignItems: 'center',
-      marginVertical: 24,
-    },
-    header: {
-      flexDirection: 'row',
-      width: '100%',
-      height: 64,
-      justifyContent: 'flex-start',
-      paddingHorizontal: 16,
-    },
-    photo: {
-      height: 64,
-      width: 64,
-      borderRadius: 32,
-      borderColor: colors.THEME[theme].borderColor,
-      borderWidth: StyleSheet.hairlineWidth,
-      marginRight: 32,
-    },
-    photoImage: {
-      width: '100%',
-      height: '100%',
-    },
-    name: {
-      marginVertical: 4,
-      color: colors.THEME[theme].textPrimaryColor,
-      fontSize: 20,
-      fontWeight: '500',
-    },
-    buttons: {
-      width: '100%',
-      paddingHorizontal: 16,
-      marginVertical: 24,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    selections: {
-      width: '100%',
-      paddingHorizontal: 16,
-      marginVertical: 8,
-    },
-    selection: {
-      width: '100%',
-      color: colors.THEME[theme].textPrimaryColor,
-    },
-    switch: {
-      width: '100%',
-      paddingHorizontal: 16,
-      marginVertical: 24,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    switchDetails: {
-      flexDirection: 'column',
-    },
-    switchPrimaryDetail: {
-      fontSize: 16,
-      color: colors.THEME[theme].textPrimaryColor,
-    },
-    switchSecondaryDetail: {
-      fontSize: 12,
-      color: colors.THEME[theme].textSecondaryColor,
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    marginVertical: 24,
+  },
+  header: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 64,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 16,
+  },
+  photo: {
+    marginRight: 16,
+  },
+  divider: {
+    width: '100%',
+  },
+  buttons: {
+    width: '100%',
+    paddingHorizontal: 16,
+    marginVertical: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  selections: {
+    width: '100%',
+    paddingHorizontal: 16,
+    marginVertical: 8,
+  },
+  switch: {
+    width: '100%',
+    paddingHorizontal: 16,
+    marginVertical: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  switchDetails: {
+    flexDirection: 'column',
+  },
+});
 
 export default withTheme(SideMenu);
