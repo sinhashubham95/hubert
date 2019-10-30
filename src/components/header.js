@@ -1,114 +1,48 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {withTheme} from 'react-native-paper';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import ConnectionStatusBar from './connectionStatusBar';
-import * as colors from '../constants/colors';
 import logo from '../assets/logo.png';
-
-const iconStyle = theme => ({
-  size: 25,
-  color: colors.THEME[theme].headerTextColor,
-});
 
 const useStyles = theme =>
   StyleSheet.create({
-    headerContainer: {
-      flex: 0,
-      elevation: 5,
-      backgroundColor: theme.headerBackgroundColor,
-    },
-    headerBaseContainer: {
-      height: 56,
+    header: {
+      width: '100%',
+      height: '100%',
       flexDirection: 'row',
+      justifyContent: 'flex-start',
       alignItems: 'center',
     },
-    leftHeader: {
-      flex: 0,
-      flexDirection: 'row',
-    },
-    centerHeader: {
-      flex: 1,
-    },
-    logo: {
-      flex: 1,
-      width: '90%',
+    headerImage: {
+      width: '80%',
+      height: '100%',
+      tintColor: theme.colors.text,
       resizeMode: 'contain',
-      tintColor: colors.THEME[theme].headerTextColor,
     },
-    navMenuButton: {
-      padding: 8,
+    menu: {
+      marginLeft: 8,
     },
   });
 
 class Header extends Component {
-  onBack = () => {
-    this.props.navigation.goBack();
-  };
-
-  onNavMenu = () => {
-    this.props.navigation.openDrawer();
-  };
-
-  renderCenterHeader = () => {
-    const {theme} = this.props;
-    const styles = useStyles(theme);
-    return (
-      <View style={styles.centerHeader}>
-        <Image source={logo} style={styles.logo} />
-      </View>
-    );
-  };
-
-  renderLeftHeader = () => {
-    const {dismissBehavior, onDismissCallback, dismissIcon, theme} = this.props;
-    const styles = useStyles(theme);
-    return (
-      <View style={styles.leftHeader}>
-        {dismissBehavior === 'back' && (
-          <TouchableOpacity onPress={this.onBack}>
-            <Icon
-              name={dismissIcon}
-              {...iconStyle(theme)}
-              style={styles.navMenuButton}
-            />
-          </TouchableOpacity>
-        )}
-        {dismissBehavior === 'callback' && (
-          <TouchableOpacity onPress={onDismissCallback}>
-            <Icon
-              name={dismissIcon}
-              {...iconStyle(theme)}
-              style={styles.navMenuButton}
-            />
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity onPress={this.onNavMenu}>
-          <Icon
-            name="menu"
-            {...iconStyle(theme)}
-            style={styles.navMenuButton}
-          />
-        </TouchableOpacity>
-      </View>
-    );
+  onMenuPress = () => {
+    const {navigation} = this.props;
+    navigation.openDrawer();
   };
 
   render() {
     const {theme} = this.props;
     const styles = useStyles(theme);
     return (
-      <View flex={0}>
-        <View style={styles.headerContainer}>
-          <View style={styles.headerBaseContainer}>
-            {this.renderLeftHeader()}
-            {this.renderCenterHeader()}
-          </View>
-        </View>
-        <ConnectionStatusBar />
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.menu} onPress={this.onMenuPress}>
+          <Icon color={theme.colors.text} name="menu" size={24} />
+        </TouchableOpacity>
+        <Image source={logo} style={styles.headerImage} />
       </View>
     );
   }
 }
 
-export default Header;
+export default withTheme(Header);

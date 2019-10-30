@@ -9,7 +9,9 @@
     "log-ios": "react-native log-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "clean": "watchman watch-del-all ; rm -rf $TMPDIR/react-native-packager-cache-* ; rm -rf $TMPDIR/haste-map-react-native-packager-*; rm -rf $TMPDIR/metro-bundler-cache-* ; rm -rf android/build ; npm cache clean --force",
+    "restart": "rm -rf node_modules; npm run clean; yarn install"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.2",

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import React, {Component} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {Provider, DefaultTheme, DarkTheme, Appbar} from 'react-native-paper';
+import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Provider, DefaultTheme, DarkTheme} from 'react-native-paper';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
@@ -11,26 +11,10 @@ import Login from './containers/login';
 import Dashboard from './containers/dashboard';
 import SideMenu from './containers/sideMenu';
 
-import logo from './assets/logo.png';
+import Header from './components/header';
+
 import * as constants from './constants';
 import {createStackNavigator} from 'react-navigation-stack';
-
-const useStyles = theme =>
-  StyleSheet.create({
-    header: {
-      width: '100%',
-      height: '100%',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    },
-    headerImage: {
-      width: '78%',
-      height: '100%',
-      tintColor: theme.text,
-      resizeMode: 'contain',
-    },
-  });
 
 const Root = createAppContainer(
   createSwitchNavigator({
@@ -50,13 +34,8 @@ const Root = createAppContainer(
             ),
           },
           {
-            defaultNavigationOptions: ({navigation, theme}) => ({
-              headerTitle: () => (
-                <View style={useStyles(theme).header}>
-                  <Appbar.Action icon="menu" onPress={navigation.openDrawer} />
-                  <Image source={logo} style={useStyles(theme).headerImage} />
-                </View>
-              ),
+            defaultNavigationOptions: ({navigation}) => ({
+              headerTitle: () => <Header navigation={navigation} />,
             }),
           },
         ),
