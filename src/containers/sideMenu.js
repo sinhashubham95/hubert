@@ -153,7 +153,7 @@ class SideMenu extends Component {
           <Switch
             value={screenProps.darkTheme}
             onValueChange={this.onThemeChange}
-            color={theme.primary}
+            color={theme.colors.primary}
           />
         </View>
       </View>

@@ -115,6 +115,10 @@ class Dashboard extends Component {
             </View>
           </View>
         </Card>
+        <Card style={styles.reports}>
+          <Card.Title title="Reports by Closing Date" />
+          <Divider />
+        </Card>
       </ScrollView>
     );
   }
@@ -155,6 +159,9 @@ const useStyles = (theme, width) =>
     },
     barText: {
       marginBottom: 4,
+    },
+    reports: {
+      marginTop: 8,
     },
   });
 
