@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withTheme} from 'react-native-paper';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../components/icon';
 
 import logo from '../assets/logo.png';
 
@@ -37,7 +37,7 @@ class Header extends Component {
     return (
       <View style={styles.header}>
         <TouchableOpacity style={styles.menu} onPress={this.onMenuPress}>
-          <Icon color={theme.colors.text} name="menu" size={24} />
+          <Icon type="md" name="menu" size={24} />
         </TouchableOpacity>
         <Image source={logo} style={styles.headerImage} />
       </View>

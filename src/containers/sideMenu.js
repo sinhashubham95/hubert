@@ -34,13 +34,20 @@ class SideMenu extends Component {
       try {
         await UserInformationService.get();
         if (UserInformationService.data.currentClientIndex >= 0) {
-          this.setState({
-            client:
+          this.setState(
+            {
+              client:
+                UserInformationService.data.clients[
+                  UserInformationService.data.currentClientIndex
+                ].NomeProprietario,
+              loading: false,
+            },
+            this.updateCode(
               UserInformationService.data.clients[
                 UserInformationService.data.currentClientIndex
-              ].NomeProprietario,
-            loading: false,
-          });
+              ].CodProprietario,
+            ),
+          );
         }
       } catch (e) {
         this.setState({loading: false}, this.showError(e.message));
@@ -79,6 +86,11 @@ class SideMenu extends Component {
 
   onShowClients = () =>
     this.setState(({showClients}) => ({showClients: !showClients}));
+
+  updateCode = value => () => {
+    const {screenProps} = this.props;
+    screenProps.updateClientCode(value);
+  };
 
   showError = message => () => {
     Snackbar.show({

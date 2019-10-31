@@ -56,6 +56,17 @@ export const SIDE_MENU_BUTTONS = [
   },
 ];
 
+export const DASHBOARD_STATUS_LIST = {
+  'Em Dia': '#2CA185',
+  Atrasado: '#8B0000',
+  Rescindido: '#FFD700',
+  Execução: '#0000CD',
+  Despejo: '#D9534F',
+  Suspenso: '#E6E9ED',
+  Vago: '#F44336',
+  Indisponível: '#2196F3',
+};
+
 export const AUTH_SERVICE_KEY = 'AUTH_SERVICE';
 export const USER_INFORMATION_SERVICE_KEY = 'USER_INFORMATION_SERVICE';
 

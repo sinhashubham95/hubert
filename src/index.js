@@ -1,7 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import React, {Component} from 'react';
-import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Provider, DefaultTheme, DarkTheme} from 'react-native-paper';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
@@ -30,6 +27,7 @@ const Root = createAppContainer(
               },
               {
                 backBehavior: 'history',
+                shifting: true,
               },
             ),
           },
@@ -52,21 +50,31 @@ export default class App extends Component {
     super(props);
     this.state = {
       darkTheme: false,
+      clientCode: 0,
     };
   }
 
   onThemeChange = () =>
     this.setState(({darkTheme}) => ({darkTheme: !darkTheme}));
 
+  updateClientCode = value => {
+    this.setState({clientCode: value});
+  };
+
   render() {
-    const {darkTheme} = this.state;
+    const {darkTheme, clientCode} = this.state;
     const paperTheme = darkTheme ? DarkTheme : DefaultTheme;
     const rootTheme = darkTheme ? constants.DARK_THEME : constants.LIGHT_THEME;
     return (
       <Provider theme={paperTheme}>
         <Root
           theme={rootTheme}
-          screenProps={{darkTheme, updateTheme: this.onThemeChange}}
+          screenProps={{
+            darkTheme,
+            clientCode,
+            updateTheme: this.onThemeChange,
+            updateClientCode: this.updateClientCode,
+          }}
         />
       </Provider>
     );
