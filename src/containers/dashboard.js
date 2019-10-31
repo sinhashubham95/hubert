@@ -18,11 +18,13 @@ import {
   RadioButton,
 } from 'react-native-paper';
 import PieChart from 'react-native-pie-chart';
+import PureChart from 'react-native-pure-chart';
 import Snackbar from 'react-native-snackbar';
 
 import Icon from '../components/icon';
 
 import DashboardService from '../utils/dashboardService';
+import * as constants from '../constants';
 
 class Dashboard extends Component {
   static navigationOptions = {
@@ -133,7 +135,7 @@ class Dashboard extends Component {
     }
     return (
       <View style={styles.reportDateSelector}>
-        <Button mode="contained" onPress={this.showSelectedDates}>
+        <Button mode="outlined" onPress={this.showSelectedDates}>
           {DashboardService.reports[selectedDate].displayDate}
         </Button>
         <Portal>
@@ -164,6 +166,51 @@ class Dashboard extends Component {
           </Dialog>
         </Portal>
       </View>
+    );
+  };
+
+  renderReportAmount = name => {
+    const {theme} = this.props;
+    const width = Dimensions.get('window').width;
+    const styles = useStyles(theme, width);
+    const {selectedDate} = this.state;
+    const dates = Object.keys(DashboardService.reports);
+    if (!dates.length) {
+      return null;
+    }
+    return (
+      <View
+        key={name}
+        style={[
+          styles.reportAmountTile,
+          {backgroundColor: constants.DASHBOARD_REPORTS_LIST[name]},
+        ]}>
+        <Text>{name}</Text>
+        <Text>{DashboardService.reports[selectedDate][name]}</Text>
+      </View>
+    );
+  };
+
+  renderReportChart = () => {
+    const dates = Object.keys(DashboardService.reports);
+    if (!dates.length) {
+      return null;
+    }
+    const reports = Object.keys(constants.DASHBOARD_REPORTS_LIST).map(name => ({
+      seriesName: name,
+      color: constants.DASHBOARD_REPORTS_LIST[name],
+      data: Object.values(DashboardService.reports).map(value => ({
+        x: value.displayDate,
+        y: value[name],
+      })),
+    }));
+    return (
+      <PureChart
+        height={160}
+        type="bar"
+        data={reports}
+        showEvenNumberXaxisLabel={false}
+      />
     );
   };
 
@@ -210,6 +257,12 @@ class Dashboard extends Component {
             {this.renderDateSelector()}
           </View>
           <Divider />
+          <View style={styles.reportAmount}>
+            {Object.keys(constants.DASHBOARD_REPORTS_LIST).map(
+              this.renderReportAmount,
+            )}
+          </View>
+          <View style={styles.chartContainer}>{this.renderReportChart()}</View>
         </Card>
       </ScrollView>
     );
@@ -256,21 +309,43 @@ const useStyles = (theme, width) =>
       marginTop: 8,
     },
     reportHeader: {
-      width: width * 0.92,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginHorizontal: width * 0.04,
     },
     reportHeaderTitle: {
-      width: width * 0.61,
+      width: width * 0.65,
+      marginRight: width * 0.05,
     },
     reportDateSelector: {
-      width: width * 0.31,
+      width: width * 0.25,
+      marginRight: width * 0.05,
     },
     reportDateRadio: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    reportAmount: {
+      width: width * 0.8,
+      marginVertical: 16,
+      marginHorizontal: width * 0.02,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    reportAmountTile: {
+      marginHorizontal: width * 0.02,
+      width: width * 0.28,
+      marginVertical: 8,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 2,
+      elevation: 2,
+    },
+    chartContainer: {
+      width: '100%',
+      marginVertical: 16,
+      paddingHorizontal: width * 0.04,
     },
   });
 
