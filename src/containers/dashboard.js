@@ -6,7 +6,17 @@ import {
   RefreshControl,
   Dimensions,
 } from 'react-native';
-import {withTheme, Divider, Card, ProgressBar, Text} from 'react-native-paper';
+import {
+  withTheme,
+  Divider,
+  Card,
+  ProgressBar,
+  Text,
+  Button,
+  Portal,
+  Dialog,
+  RadioButton,
+} from 'react-native-paper';
 import PieChart from 'react-native-pie-chart';
 import Snackbar from 'react-native-snackbar';
 
@@ -23,6 +33,9 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       loading: false,
+      selectedDate: '',
+      radioDate: '',
+      showSelectedDates: false,
     };
   }
 
@@ -37,6 +50,8 @@ class Dashboard extends Component {
       this.fetchDataWithLoading();
     }
   }
+
+  onRadioDateChange = value => this.setState({radioDate: value});
 
   fetchDataWithLoading = () => {
     this.setState({loading: true}, this.fetchData);
@@ -53,7 +68,12 @@ class Dashboard extends Component {
     } catch (e) {
       this.showError(e.message);
     }
-    this.setState({loading: false});
+    const dates = Object.keys(DashboardService.reports);
+    this.setState({
+      loading: false,
+      selectedDate: dates[0] || '',
+      radioDate: dates[0] || '',
+    });
   };
 
   showError = message => {
@@ -61,6 +81,27 @@ class Dashboard extends Component {
       duration: Snackbar.LENGTH_SHORT,
       title: message,
     });
+  };
+
+  showSelectedDates = () => {
+    this.setState({showSelectedDates: true});
+  };
+
+  hideSelectedDates = () => {
+    this.setState({showSelectedDates: false});
+  };
+
+  updateSelectedDate = () => {
+    if (this.state.radioDate !== this.state.selectedDate) {
+      this.setState({
+        selectedDate: this.state.radioDate,
+        showSelectedDates: false,
+      });
+    } else {
+      this.setState({
+        showSelectedDates: false,
+      });
+    }
   };
 
   renderRefreshControl = () => (
@@ -77,6 +118,51 @@ class Dashboard extends Component {
       <View key={value.key} style={styles.bar}>
         <Text style={styles.barText}>{value.title}</Text>
         <ProgressBar progress={value.percentage / 100.0} color={value.color} />
+      </View>
+    );
+  };
+
+  renderDateSelector = () => {
+    const {theme} = this.props;
+    const width = Dimensions.get('window').width;
+    const styles = useStyles(theme, width);
+    const {selectedDate, showSelectedDates, radioDate} = this.state;
+    const dates = Object.keys(DashboardService.reports);
+    if (!dates.length) {
+      return null;
+    }
+    return (
+      <View style={styles.reportDateSelector}>
+        <Button mode="contained" onPress={this.showSelectedDates}>
+          {DashboardService.reports[selectedDate].displayDate}
+        </Button>
+        <Portal>
+          <Dialog
+            visible={showSelectedDates}
+            onDismiss={this.hideSelectedDates}>
+            <Dialog.Title>Choose a Date</Dialog.Title>
+            <Dialog.Content>
+              <RadioButton.Group
+                value={radioDate}
+                onValueChange={this.onRadioDateChange}>
+                {dates.map(date => (
+                  <View style={styles.reportDateRadio} key={date}>
+                    <RadioButton value={date} />
+                    <Text>
+                      {DashboardService.reports[date]
+                        ? DashboardService.reports[date].displayDate
+                        : ''}
+                    </Text>
+                  </View>
+                ))}
+              </RadioButton.Group>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={this.hideSelectedDates}>CANCEL</Button>
+              <Button onPress={this.updateSelectedDate}>OK</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </View>
     );
   };
@@ -116,7 +202,13 @@ class Dashboard extends Component {
           </View>
         </Card>
         <Card style={styles.reports}>
-          <Card.Title title="Reports by Closing Date" />
+          <View style={styles.reportHeader}>
+            <Card.Title
+              style={styles.reportHeaderTitle}
+              title="Reports by Closing Date"
+            />
+            {this.renderDateSelector()}
+          </View>
           <Divider />
         </Card>
       </ScrollView>
@@ -162,6 +254,23 @@ const useStyles = (theme, width) =>
     },
     reports: {
       marginTop: 8,
+    },
+    reportHeader: {
+      width: width * 0.92,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginHorizontal: width * 0.04,
+    },
+    reportHeaderTitle: {
+      width: width * 0.61,
+    },
+    reportDateSelector: {
+      width: width * 0.31,
+    },
+    reportDateRadio: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 

@@ -4,6 +4,7 @@ import * as constants from '../constants';
 class DashboardService {
   constructor() {
     this.__data = {};
+    this.__reports = {};
   }
 
   async get(clientCode) {
@@ -14,15 +15,20 @@ class DashboardService {
       Axios.get(
         `/Locacao/GraficoLocacao?CodProprietario=${clientCode}&TipoGrafico=2`,
       ),
+      Axios.get(
+        `/Locacao/GraficoLocacao?CodProprietario=${clientCode}&TipoGrafico=3`,
+      ),
     ]);
     if (
-      responses.length !== 2 ||
+      responses.length !== 3 ||
       responses[0].status !== 200 ||
-      responses[1].status !== 200
+      responses[1].status !== 200 ||
+      responses[2].status !== 200
     ) {
-      throw new Error('Error fetching rental status.');
+      throw new Error('Error fetching dashboard information.');
     }
     this.__data = {};
+    this.__reports = {};
     this.__process(responses[0].data.Dados.Valores);
     this.__process(responses[1].data.Dados.Valores);
     let total = 0;
@@ -34,7 +40,20 @@ class DashboardService {
       this.__data[keys[i]].percentage = this.__data[keys[i]].value =
         (this.__data[keys[i]].count * 100.0) / total;
     }
-    return this.data;
+    const values = responses[2].data.Dados.Valores;
+    for (let i = 0; i < values.length; i += 1) {
+      this.__reports[values[i].DataDeposito] = {
+        date: values[i].DataDeposito,
+        displayDate: values[i].Legenda,
+        revenue: values[i].Receita,
+        expense: values[i].Despesa,
+        income: values[i].Total,
+      };
+    }
+    return {
+      data: this.__data,
+      reports: this.__reports,
+    };
   }
 
   set data(value) {
@@ -43,6 +62,10 @@ class DashboardService {
 
   get data() {
     return this.__data;
+  }
+
+  get reports() {
+    return this.__reports;
   }
 
   __process(values) {
