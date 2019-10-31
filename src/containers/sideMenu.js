@@ -57,6 +57,16 @@ class SideMenu extends Component {
 
   onClientChange = (clientName, index) => () => {
     UserInformationService.updateClient(index);
+    this.setState(
+      {
+        client: clientName,
+        loading: false,
+        showClients: false,
+      },
+      this.updateCode(
+        UserInformationService.data.clients[index].CodProprietario,
+      ),
+    );
     this.setState({client: clientName, showClients: false});
   };
 

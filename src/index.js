@@ -57,9 +57,7 @@ export default class App extends Component {
   onThemeChange = () =>
     this.setState(({darkTheme}) => ({darkTheme: !darkTheme}));
 
-  updateClientCode = value => {
-    this.setState({clientCode: value});
-  };
+  updateClientCode = value => this.setState({clientCode: value});
 
   render() {
     const {darkTheme, clientCode} = this.state;
