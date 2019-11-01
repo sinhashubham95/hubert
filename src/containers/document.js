@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {withTheme, Card, Headline, Caption, TouchableRipple} from 'react-native-paper';
+import {
+  withTheme,
+  Card,
+  Headline,
+  Caption,
+  TouchableRipple,
+} from 'react-native-paper';
 import {
   StyleSheet,
   RefreshControl,
@@ -7,12 +13,15 @@ import {
   Image,
   Dimensions,
   View,
+  PermissionsAndroid,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
+import Fetch from 'react-native-fetch-blob';
 
 import Icon from '../components/icon';
 import * as constants from '../constants';
 import DocumentService from '../utils/documentService';
+import AuthService from '../utils/authService';
 
 class Document extends Component {
   static navigationOptions = {
@@ -45,9 +54,50 @@ class Document extends Component {
     }
   }
 
-  onDocumentClick = document => () => {
-
+  onDocumentClick = document => async () => {
+    try {
+      const grantedExternalRead = await this.checkPermissionExternalRead();
+      const grantedExternalWrite = await this.checkPermissionExternalWrite();
+      if (
+        grantedExternalRead === PermissionsAndroid.RESULTS.GRANTED &&
+        grantedExternalWrite === PermissionsAndroid.RESULTS.GRANTED) {
+        // we can go ahead and download the file now
+        await Fetch.fetch('GET', document.url, {
+          Authorization: `${AuthService.data.tokenType} ${
+            AuthService.data.token
+          }`,
+        });
+      }
+    } catch (e) {
+      this.showError(e.message);
+    }
   };
+
+  checkPermissionExternalRead = () =>
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      {
+        title: 'Read External Storage',
+        message:
+          'Allow access to read external storage for saving the document.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+
+  checkPermissionExternalWrite = () =>
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'Read External Storage',
+        message:
+          'Allow access to write external storage for saving the document.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
 
   fetchDataWithLoading = () => {
     this.setState({loading: true}, this.fetchData);
