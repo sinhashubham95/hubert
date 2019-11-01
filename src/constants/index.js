@@ -1,3 +1,6 @@
+import PDF from '../assets/pdf.png';
+import DOC from '../assets/doc.png';
+
 export const LIGHT_THEME = 'light';
 export const DARK_THEME = 'dark';
 
@@ -71,6 +74,11 @@ export const DASHBOARD_REPORTS_LIST = {
   revenue: 'rgb(93,203,156)',
   expense: 'rgb(236,89,86)',
   income: 'rgb(243,171,123)',
+};
+
+export const DOCUMENT_FILE_LIST = {
+  pdf: PDF,
+  doc: DOC,
 };
 
 export const AUTH_SERVICE_KEY = 'AUTH_SERVICE';

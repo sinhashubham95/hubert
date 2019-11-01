@@ -6,6 +6,7 @@ import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom
 
 import Login from './containers/login';
 import Dashboard from './containers/dashboard';
+import Document from './containers/document';
 import SideMenu from './containers/sideMenu';
 
 import Header from './components/header';
@@ -23,7 +24,7 @@ const Root = createAppContainer(
             Tabs: createMaterialBottomTabNavigator(
               {
                 Dashboard,
-                Report: Dashboard,
+                Document,
               },
               {
                 backBehavior: 'history',
