@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import moment from 'moment';
 
 class DocumentService {
   constructor() {
@@ -16,7 +17,7 @@ class DocumentService {
       title: data.DescrTipoDocumentoWeb,
       description: data.Observacao,
       url: data.UrlArquivo,
-      date: data.DataInclusao,
+      date: moment(data.DataInclusao).format('DD/MM/YYYY'),
       key: `document-${data.Id}`,
       type: data.UrlArquivo.substr(
         data.UrlArquivo.lastIndexOf('.') + 1,

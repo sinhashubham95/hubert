@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {
   withTheme,
   Card,
-  Headline,
+  Text,
   Caption,
   TouchableRipple,
+  ProgressBar,
 } from 'react-native-paper';
 import {
   StyleSheet,
@@ -39,6 +40,7 @@ class Document extends Component {
     super(props);
     this.state = {
       loading: false,
+      documents: {},
     };
   }
 
@@ -60,17 +62,45 @@ class Document extends Component {
       const grantedExternalWrite = await this.checkPermissionExternalWrite();
       if (
         grantedExternalRead === PermissionsAndroid.RESULTS.GRANTED &&
-        grantedExternalWrite === PermissionsAndroid.RESULTS.GRANTED) {
+        grantedExternalWrite === PermissionsAndroid.RESULTS.GRANTED
+      ) {
         // we can go ahead and download the file now
-        await Fetch.fetch('GET', document.url, {
-          Authorization: `${AuthService.data.tokenType} ${
-            AuthService.data.token
-          }`,
-        });
+        let {documents} = this.state;
+        documents = Object.assign({}, documents);
+        documents[document.key] = {
+          downloadInProgress: true,
+          downloadProgress: 0,
+        };
+        this.setState({documents}, this.downloadDocument(document));
       }
     } catch (e) {
       this.showError(e.message);
     }
+  };
+
+  downloadDocument = document => async () => {
+    try {
+      await Fetch.config({
+        addAndroidDownloads: {
+          useDownloadManager: true,
+        },
+      })
+        .fetch('GET', document.url, {
+          Authorization: `${AuthService.data.tokenType} ${
+            AuthService.data.token
+          }`,
+        })
+        .progress({count: 10}, this.updateProgress(document));
+    } catch (e) {
+      this.showError(e.message);
+    }
+    let {documents} = this.state;
+    documents = Object.assign({}, documents);
+    documents[document.key] = {
+      downloadInProgress: false,
+      downloadProgress: 0,
+    };
+    this.setState({documents});
   };
 
   checkPermissionExternalRead = () =>
@@ -99,6 +129,16 @@ class Document extends Component {
       },
     );
 
+  updateProgress = document => (received, total) => {
+    let {documents} = this.state;
+    documents = Object.assign({}, documents);
+    documents[document.key] = {
+      downloadInProgress: true,
+      downloadProgress: received / total,
+    };
+    this.setState({documents});
+  };
+
   fetchDataWithLoading = () => {
     this.setState({loading: true}, this.fetchData);
   };
@@ -114,7 +154,16 @@ class Document extends Component {
     } catch (e) {
       this.showError(e.message);
     }
+    const docs = DocumentService.data;
+    const documents = {};
+    for (let i = 0; i < docs.length; i += 1) {
+      documents[docs[i].key] = {
+        downloadInProgress: false,
+        downloadProgress: 0,
+      };
+    }
     this.setState({
+      documents,
       loading: false,
     });
   };
@@ -133,12 +182,31 @@ class Document extends Component {
     />
   );
 
-  renderDocument = document => {
+  renderProgress = (document, docState) => {
+    console.log(document, docState);
     const {theme} = this.props;
     const {width} = Dimensions.get('window');
     const styles = useStyles(theme, width);
     return (
-      <TouchableRipple key={document.key} onPress={this.onDocumentClick(document)}>
+      <ProgressBar
+        indeterminate={docState.downloadProgress === 0}
+        progress={docState.downloadProgress}
+        visible={docState.downloadInProgress}
+        style={styles.progress}
+      />
+    );
+  };
+
+  renderDocument = document => {
+    const {theme} = this.props;
+    const {width} = Dimensions.get('window');
+    const {documents} = this.state;
+    const docState = documents[document.key];
+    const styles = useStyles(theme, width);
+    return (
+      <TouchableRipple
+        key={document.key}
+        onPress={this.onDocumentClick(document)}>
         <Card style={styles.documentContainer}>
           <Card.Content style={styles.document}>
             <Image
@@ -146,10 +214,16 @@ class Document extends Component {
               source={constants.DOCUMENT_FILE_LIST[document.type]}
             />
             <View style={styles.documentDescription}>
-              <Headline style={styles.documentHeadline}>{document.title}</Headline>
-              <Caption style={styles.documentCaption}>{document.description}</Caption>
+              <Text style={styles.documentHeadline}>{document.title}</Text>
+              <Caption style={styles.documentCaption}>
+                {document.description}
+              </Caption>
+            </View>
+            <View style={styles.documentDate}>
+              <Caption>{document.date}</Caption>
             </View>
           </Card.Content>
+          {this.renderProgress(document, docState)}
         </Card>
       </TouchableRipple>
     );
@@ -176,7 +250,7 @@ const useStyles = (theme, width) =>
     },
     documentContainer: {
       marginVertical: 4,
-      paddingVertical: 16,
+      paddingTop: 16,
     },
     document: {
       flexDirection: 'row',
@@ -192,13 +266,21 @@ const useStyles = (theme, width) =>
     documentDescription: {
       flexDirection: 'column',
       marginHorizontal: width * 0.02,
-      width: width * 0.68,
+      width: width * 0.44,
     },
     documentHeadline: {
       width: '100%',
+      fontWeight: '700',
     },
     documentCaption: {
       width: '100%',
+    },
+    progress: {
+      marginTop: 16,
+    },
+    documentDate: {
+      width: width * 0.2,
+      marginHorizontal: width * 0.02,
     },
   });
 
