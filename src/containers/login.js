@@ -14,6 +14,7 @@ import logo from '../assets/logo.png';
 
 import * as constants from '../constants';
 
+import translationService from '../utils/translationService';
 import authService from '../utils/authService';
 
 class Login extends Component {
@@ -64,10 +65,12 @@ class Login extends Component {
       return {values};
     });
 
-  renderFormInput = ({value, updateValue, ...otherProps}, index) => (
+  renderFormInput = ({value, updateValue, key, ...otherProps}, index) => (
     <TextInput
+      key={key}
       value={this.state.values[index]}
       onChangeText={this.onValueChange(index)}
+      placeholder={translationService.get(key)}
       {...otherProps}
     />
   );
@@ -87,7 +90,7 @@ class Login extends Component {
             loading={loading}
             disabled={values.reduce((result, value) => result || !value, false)}
             onPress={this.onSubmit}>
-            Log In
+            {translationService.get('logIn')}
           </Button>
         </View>
       </KeyboardAvoidingView>

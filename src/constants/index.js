@@ -7,7 +7,6 @@ export const DARK_THEME = 'dark';
 export const LOGIN_FORM = [
   {
     key: 'username',
-    placeholder: 'Username',
     autoCompleteType: 'username',
     textContentType: 'username',
     autoCapitalize: 'none',
@@ -16,7 +15,6 @@ export const LOGIN_FORM = [
   },
   {
     key: 'password',
-    placeholder: 'Password',
     autoCompleteType: 'password',
     textContentType: 'password',
     secureTextEntry: true,

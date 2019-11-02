@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
+import 'react-native-gesture-handler';
 import {Provider, DefaultTheme, DarkTheme} from 'react-native-paper';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
+import {createStackNavigator} from 'react-navigation-stack';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
+import Snackbar from 'react-native-snackbar';
+
+import TranslationService from './utils/translationService';
 
 import Login from './containers/login';
 import Dashboard from './containers/dashboard';
@@ -12,7 +17,6 @@ import SideMenu from './containers/sideMenu';
 import Header from './components/header';
 
 import * as constants from './constants';
-import {createStackNavigator} from 'react-navigation-stack';
 
 const Root = createAppContainer(
   createSwitchNavigator({
@@ -48,6 +52,16 @@ const Root = createAppContainer(
 
 export default class App extends Component {
   constructor(props) {
+    (async () => {
+      try {
+        await TranslationService.init();
+      } catch (e) {
+        Snackbar.show({
+          title: e.message,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    })();
     super(props);
     this.state = {
       darkTheme: false,
