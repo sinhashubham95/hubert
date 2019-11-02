@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import * as constants from '../constants';
+import translationService from './translationService';
 
 class DashboardService {
   constructor() {
@@ -25,7 +26,7 @@ class DashboardService {
       responses[1].status !== 200 ||
       responses[2].status !== 200
     ) {
-      throw new Error('Error fetching dashboard information.');
+      throw new Error(translationService.get('dashboardError'));
     }
     this.__data = {};
     this.__reports = {};

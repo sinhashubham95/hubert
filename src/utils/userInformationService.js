@@ -2,6 +2,7 @@ import Axios from 'axios';
 
 import Service from './service';
 import * as constants from '../constants';
+import translationService from "./translationService";
 
 class UserInformationService extends Service {
   constructor() {
@@ -32,7 +33,7 @@ class UserInformationService extends Service {
       responses[0].status !== 200 ||
       responses[1].status !== 200
     ) {
-      throw new Error('Error fetching user information.');
+      throw new Error(translationService.get('userInformationError'));
     }
     const clients = responses[1].data.Dados || [];
     await (this.data = {

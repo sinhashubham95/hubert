@@ -212,9 +212,7 @@ class Dashboard extends Component {
           {backgroundColor: constants.DASHBOARD_REPORTS_LIST[name]},
         ]}>
         <Text>{translationService.get(name)}</Text>
-        <Text>
-          {this.format(DashboardService.reports[selectedDate][name])}
-        </Text>
+        <Text>{this.format(DashboardService.reports[selectedDate][name])}</Text>
       </View>
     );
   };

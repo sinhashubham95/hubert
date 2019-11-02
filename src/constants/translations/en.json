@@ -24,6 +24,11 @@
     "ok": "OK",
     "revenue": "Revenue",
     "expense": "Expense",
-    "income": "Income"
+    "income": "Income",
+    "networkError": "Network Error",
+    "invalidLogin": "Invalid username and password combination.",
+    "dashboardError": "Error fetching dashboard information.",
+    "documentError": "Error fetching document information.",
+    "userInformationError": "Error fetching user information."
   }
 }

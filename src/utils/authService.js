@@ -4,6 +4,7 @@ import QS from 'qs';
 import * as constants from '../constants';
 
 import Service from './service';
+import translationService from './translationService';
 
 class AuthService extends Service {
   constructor() {
@@ -37,22 +38,30 @@ class AuthService extends Service {
     if (!password) {
       throw new Error('Password is required.');
     }
-    const response = await Axios.post(
-      'https://api-test.hubert.com.br/token',
-      QS.stringify({
-        grant_type: 'password',
-        username,
-        password,
-        scope: 'COD_APP=',
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+    let response;
+    try {
+      response = await Axios.post(
+        'https://api-test.hubert.com.br/token',
+        QS.stringify({
+          grant_type: 'password',
+          username,
+          password,
+          scope: 'COD_APP=',
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
         },
-      },
-    );
-    if (response.status !== 200) {
-      throw new Error('Invalid username and password combination.');
+      );
+      if (response.status !== 200) {
+        throw new Error(translationService.get('invalidLogin'));
+      }
+    } catch (e) {
+      if (e.response) {
+        throw new Error(translationService.get('invalidLogin'));
+      }
+      throw e;
     }
     await (this.data = {
       username,
