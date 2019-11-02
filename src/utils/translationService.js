@@ -22,7 +22,6 @@ class TranslationService {
   }
 
   get(key) {
-    console.log(key);
     if (!this.__loaded) {
       return '';
     }

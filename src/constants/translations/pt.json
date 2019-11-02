@@ -1,5 +1,6 @@
 {
   "default": {
+    "appTitle": "ADMINISTRAÇÃO DE IMÓVEIS",
     "username": "Usuario",
     "password": "Senha",
     "logIn": "LOG IN"

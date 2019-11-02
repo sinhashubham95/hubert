@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 
-import {TextInput, Button, withTheme} from 'react-native-paper';
+import {TextInput, Button, withTheme, Headline} from 'react-native-paper';
 
 import logo from '../assets/logo.png';
 
@@ -80,8 +80,9 @@ class Login extends Component {
     const {theme} = this.props;
     const styles = useStyles(theme);
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.container}>
         <Image source={logo} style={styles.logo} />
+        <Headline>{translationService.get('appTitle')}</Headline>
         <View style={styles.form}>
           {constants.LOGIN_FORM.map(this.renderFormInput)}
           <Button
@@ -104,7 +105,7 @@ const useStyles = theme =>
       flex: 1,
       backgroundColor: theme.background,
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       paddingHorizontal: 16,
     },
     logo: {
@@ -112,7 +113,6 @@ const useStyles = theme =>
       width: '100%',
       resizeMode: 'contain',
       alignSelf: 'center',
-      marginBottom: 64,
       tintColor: theme.text,
     },
     form: {

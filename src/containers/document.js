@@ -183,7 +183,6 @@ class Document extends Component {
   );
 
   renderProgress = (document, docState) => {
-    console.log(document, docState);
     const {theme} = this.props;
     const {width} = Dimensions.get('window');
     const styles = useStyles(theme, width);
