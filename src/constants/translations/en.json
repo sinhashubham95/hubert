@@ -3,6 +3,27 @@
     "appTitle": "PROPERTY MANAGEMENT",
     "username": "Username",
     "password": "Password",
-    "logIn": "LOG IN"
+    "logIn": "LOG IN",
+    "notAvailable": "This functionality will be available soon.",
+    "changePassword": "Change Password",
+    "logout": "Logout",
+    "darkTheme": "Dark Theme",
+    "darkThemeCaption": "Turn background colors dark",
+    "Em Dia": "On Time",
+    "Atrasado": "Late",
+    "Rescindido": "Terminated",
+    "Execução": "Execution",
+    "Despejo": "Being Envicted",
+    "Suspenso": "Suspended",
+    "Vago": "Vacant",
+    "Indisponível": "Not Available",
+    "rentalStatus": "Rental Status",
+    "reportClosing": "Reports By Closing Date",
+    "dateSelector": "Choose a Date",
+    "cancel": "CANCEL",
+    "ok": "OK",
+    "revenue": "Revenue",
+    "expense": "Expense",
+    "income": "Income"
   }
 }

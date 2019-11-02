@@ -29,7 +29,7 @@ export const LOGOUT = 'logout';
 export const SIDE_MENU_BUTTONS = [
   {
     key: CHANGE_PASSWORD,
-    label: 'Change Password',
+    label: 'changePassword',
     mode: 'contained',
     compact: true,
     uppercase: false,
@@ -43,7 +43,7 @@ export const SIDE_MENU_BUTTONS = [
   },
   {
     key: LOGOUT,
-    label: 'Logout',
+    label: 'logout',
     mode: 'outlined',
     compact: true,
     uppercase: false,

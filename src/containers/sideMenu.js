@@ -18,6 +18,7 @@ import {
 import AuthService from '../utils/authService';
 import UserInformationService from '../utils/userInformationService';
 import * as constants from '../constants';
+import translationService from '../utils/translationService';
 
 class SideMenu extends Component {
   constructor(props) {
@@ -72,7 +73,7 @@ class SideMenu extends Component {
 
   onButtonPress = key => next => {
     if (key === constants.CHANGE_PASSWORD) {
-      this.showError('This functionality will be available soon.')();
+      this.showError(translationService.get('notAvailable'))();
       return;
     }
     (async () => {
@@ -111,7 +112,7 @@ class SideMenu extends Component {
 
   renderButton = ({label, key, ...otherProps}) => (
     <Button key={key} onPress={this.onButtonPress(key)} {...otherProps}>
-      {label}
+      {translationService.get(label)}
     </Button>
   );
 
@@ -157,8 +158,8 @@ class SideMenu extends Component {
         <Divider style={styles.divider} />
         <View style={styles.switch}>
           <View style={styles.switchDetails}>
-            <Title>Dark Theme</Title>
-            <Caption>Turn background colors dark</Caption>
+            <Title>{translationService.get('darkTheme')}</Title>
+            <Caption>{translationService.get('darkThemeCaption')}</Caption>
           </View>
           <Switch
             value={screenProps.darkTheme}

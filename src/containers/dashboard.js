@@ -25,6 +25,7 @@ import Icon from '../components/icon';
 
 import DashboardService from '../utils/dashboardService';
 import * as constants from '../constants';
+import translationService from '../utils/translationService';
 
 class Dashboard extends Component {
   static navigationOptions = {
@@ -106,6 +107,23 @@ class Dashboard extends Component {
     }
   };
 
+  format = value => {
+    let split = `${value}`.split('.');
+    let [l, r] = split;
+    if (!r) {
+      r = '0';
+    }
+    const lLength = l.length;
+    let fl = '';
+    for (let i = 0; i < lLength; i += 1) {
+      if ((lLength - i) % 3 === 0) {
+        fl = fl + '.';
+      }
+      fl = fl + l[i];
+    }
+    return `R$ ${fl},${r}`;
+  };
+
   renderRefreshControl = () => (
     <RefreshControl
       refreshing={this.state.loading}
@@ -118,7 +136,9 @@ class Dashboard extends Component {
     const styles = useStyles(theme);
     return (
       <View key={value.key} style={styles.bar}>
-        <Text style={styles.barText}>{value.title}</Text>
+        <Text style={styles.barText}>
+          {translationService.get(value.title)}
+        </Text>
         <ProgressBar progress={value.percentage / 100.0} color={value.color} />
       </View>
     );
@@ -142,7 +162,9 @@ class Dashboard extends Component {
           <Dialog
             visible={showSelectedDates}
             onDismiss={this.hideSelectedDates}>
-            <Dialog.Title>Choose a Date</Dialog.Title>
+            <Dialog.Title>
+              {translationService.get('dateSelector')}
+            </Dialog.Title>
             <Dialog.Content>
               <RadioButton.Group
                 value={radioDate}
@@ -160,8 +182,12 @@ class Dashboard extends Component {
               </RadioButton.Group>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={this.hideSelectedDates}>CANCEL</Button>
-              <Button onPress={this.updateSelectedDate}>OK</Button>
+              <Button onPress={this.hideSelectedDates}>
+                {translationService.get('cancel')}
+              </Button>
+              <Button onPress={this.updateSelectedDate}>
+                {translationService.get('ok')}
+              </Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -185,8 +211,10 @@ class Dashboard extends Component {
           styles.reportAmountTile,
           {backgroundColor: constants.DASHBOARD_REPORTS_LIST[name]},
         ]}>
-        <Text>{name}</Text>
-        <Text>{DashboardService.reports[selectedDate][name]}</Text>
+        <Text>{translationService.get(name)}</Text>
+        <Text>
+          R$ {this.format(DashboardService.reports[selectedDate][name])}
+        </Text>
       </View>
     );
   };
@@ -197,7 +225,7 @@ class Dashboard extends Component {
       return null;
     }
     const reports = Object.keys(constants.DASHBOARD_REPORTS_LIST).map(name => ({
-      seriesName: name,
+      seriesName: translationService.get(name),
       color: constants.DASHBOARD_REPORTS_LIST[name],
       data: Object.values(DashboardService.reports).map(value => ({
         x: value.displayDate,
@@ -230,7 +258,7 @@ class Dashboard extends Component {
         style={styles.container}
         refreshControl={this.renderRefreshControl()}>
         <Card>
-          <Card.Title title="Rental Status" />
+          <Card.Title title={translationService.get('rentalStatus')} />
           <Divider />
           <View style={styles.pieContainer}>
             <PieChart
@@ -252,7 +280,7 @@ class Dashboard extends Component {
           <View style={styles.reportHeader}>
             <Card.Title
               style={styles.reportHeaderTitle}
-              title="Reports by Closing Date"
+              title={translationService.get('reportClosing')}
             />
             {this.renderDateSelector()}
           </View>
