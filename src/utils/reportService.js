@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import momemt from 'moment';
 
 import {formatCurrency} from './index';
 import translationService from './translationService';
@@ -88,7 +89,9 @@ class ReportService {
       contractStatus: res.data.Dados.Imovel.SituacaoContrato
         ? res.data.Dados.Imovel.SituacaoContrato
         : res.data.Dados.Imovel.Situacao,
-      contractDate: res.data.Dados.Imovel.ValidadeContrato,
+      contractDate: momemt(res.data.Dados.Imovel.ValidadeContrato).format(
+        'DD/MM/YYYY',
+      ),
       expense: formatCurrency(
         response.data.Dados.Prestacoes[0].Imoveis[ind].TotalDebito,
       ),
@@ -99,6 +102,7 @@ class ReportService {
         response.data.Dados.Prestacoes[0].Imoveis[ind].TotalImovel,
       ),
     }));
+    console.log(this.__properties);
     return this.__properties;
   }
 

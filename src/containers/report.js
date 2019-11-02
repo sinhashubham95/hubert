@@ -9,8 +9,6 @@ import {
   Text,
   Divider,
   DataTable,
-  List,
-  Surface,
 } from 'react-native-paper';
 import {
   ScrollView,
@@ -206,7 +204,7 @@ class Report extends Component {
     }
     return (
       <View
-        key={name}
+        key={`report_amount_${name}`}
         style={[
           styles.amountTile,
           {backgroundColor: constants.REPORTS_LIST[name]},
@@ -223,35 +221,51 @@ class Report extends Component {
     </DataTable.Title>
   );
 
+  renderPropertyData = (name, value) => {
+    if (constants.REPORTS_LIST[name]) {
+      return <Text style={{color: constants.REPORTS_LIST[name]}}>{value}</Text>;
+    }
+    return value;
+  };
+
   renderPropertyCell = property => name => (
     <DataTable.Cell key={`property_cell_${property.code}_${name}`}>
-      {property[name]}
+      {this.renderPropertyData(name, property[name])}
     </DataTable.Cell>
   );
 
   renderProperty = (property, index) => (
-    <DataTable.Row key={`property_${property.code}`}>
-      {constants.REPORTS_TABLE_LIST.map(this.renderPropertyCell(property))}
-      <List.Accordion
-        expanded={this.state.propertyExpand[index]}
-        title=""
-        onPress={this.onPropertyClick(index)}>
-        <Surface>
-          <DataTable>
-            <DataTable.Header>
-              {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                this.renderPropertyHeader,
-              )}
-            </DataTable.Header>
-            <DataTable.Row>
-              {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                this.renderPropertyCell(property),
-              )}
-            </DataTable.Row>
-          </DataTable>
-        </Surface>
-      </List.Accordion>
-    </DataTable.Row>
+    <View key={`property_${property.code}`}>
+      <DataTable.Row onPress={this.onPropertyClick(index)}>
+        {constants.REPORTS_TABLE_LIST.map(this.renderPropertyCell(property))}
+      </DataTable.Row>
+      <Portal>
+        <Dialog
+          visible={this.state.propertyExpand[index]}
+          onDismisss={this.onPropertyClick(index)}>
+          <Dialog.Title>{property.name}</Dialog.Title>
+          <Dialog.Content>
+            <DataTable>
+              <DataTable.Header>
+                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
+                  this.renderPropertyHeader,
+                )}
+              </DataTable.Header>
+              <DataTable.Row>
+                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
+                  this.renderPropertyCell(property),
+                )}
+              </DataTable.Row>
+            </DataTable>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={this.onPropertyClick(index)}>
+              {translationService.get('ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    </View>
   );
 
   renderProperties = () => {
@@ -263,7 +277,6 @@ class Report extends Component {
       <DataTable>
         <DataTable.Header>
           {constants.REPORTS_TABLE_LIST.map(this.renderPropertyHeader)}
-          <DataTable.Title />
         </DataTable.Header>
         {properties.map(this.renderProperty)}
       </DataTable>
