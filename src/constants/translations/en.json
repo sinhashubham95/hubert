@@ -29,6 +29,13 @@
     "invalidLogin": "Invalid username and password combination.",
     "dashboardError": "Error fetching dashboard information.",
     "documentError": "Error fetching document information.",
-    "userInformationError": "Error fetching user information."
+    "userInformationError": "Error fetching user information.",
+    "reportDateError": "Error fetching deposit dates for reports.",
+    "reportRentalError": "Error fetching rental reports.",
+    "reportPropertyDetailsError": "Error fetching property details.",
+    "name": "Property",
+    "status": "Status",
+    "tenant": "Tenant",
+    "contractDate": "Contract Date"
   }
 }

@@ -12,6 +12,7 @@ import TranslationService from './utils/translationService';
 import Login from './containers/login';
 import Dashboard from './containers/dashboard';
 import Document from './containers/document';
+import Report from './containers/report';
 import SideMenu from './containers/sideMenu';
 
 import Header from './components/header';
@@ -28,6 +29,7 @@ const Root = createAppContainer(
             Tabs: createMaterialBottomTabNavigator(
               {
                 Dashboard,
+                Report,
                 Document,
               },
               {

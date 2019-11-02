@@ -23,6 +23,7 @@ import Snackbar from 'react-native-snackbar';
 
 import Icon from '../components/icon';
 
+import {formatCurrency} from '../utils';
 import DashboardService from '../utils/dashboardService';
 import * as constants from '../constants';
 import translationService from '../utils/translationService';
@@ -105,23 +106,6 @@ class Dashboard extends Component {
         showSelectedDates: false,
       });
     }
-  };
-
-  format = value => {
-    let split = `${value}`.split('.');
-    let [l, r] = split;
-    if (!r) {
-      r = '0';
-    }
-    const lLength = l.length;
-    let fl = '';
-    for (let i = 0; i < lLength; i += 1) {
-      if ((lLength - i) % 3 === 0) {
-        fl = fl + '.';
-      }
-      fl = fl + l[i];
-    }
-    return `R$ ${fl},${r}`;
   };
 
   renderRefreshControl = () => (
@@ -209,10 +193,12 @@ class Dashboard extends Component {
         key={name}
         style={[
           styles.reportAmountTile,
-          {backgroundColor: constants.DASHBOARD_REPORTS_LIST[name]},
+          {backgroundColor: constants.REPORTS_LIST[name]},
         ]}>
         <Text>{translationService.get(name)}</Text>
-        <Text>{this.format(DashboardService.reports[selectedDate][name])}</Text>
+        <Text>
+          {formatCurrency(DashboardService.reports[selectedDate][name])}
+        </Text>
       </View>
     );
   };
@@ -222,9 +208,9 @@ class Dashboard extends Component {
     if (!dates.length) {
       return null;
     }
-    const reports = Object.keys(constants.DASHBOARD_REPORTS_LIST).map(name => ({
+    const reports = Object.keys(constants.REPORTS_LIST).map(name => ({
       seriesName: translationService.get(name),
-      color: constants.DASHBOARD_REPORTS_LIST[name],
+      color: constants.REPORTS_LIST[name],
       data: Object.values(DashboardService.reports).map(value => ({
         x: value.displayDate,
         y: value[name],
@@ -284,7 +270,7 @@ class Dashboard extends Component {
           </View>
           <Divider />
           <View style={styles.reportAmount}>
-            {Object.keys(constants.DASHBOARD_REPORTS_LIST).map(
+            {Object.keys(constants.REPORTS_LIST).map(
               this.renderReportAmount,
             )}
           </View>

@@ -8,11 +8,19 @@ class DocumentService {
   }
 
   async get(clientCode) {
-    const response = await Axios.get(
-      `/Locacao/Documentos?Parametros.codProprietario=${clientCode}&Parametros.tipoFiltro=1`,
-    );
-    if (response.status !== 200) {
-      throw new Error(translationService.get('documentError'));
+    let response;
+    try {
+      response = await Axios.get(
+        `/Locacao/Documentos?Parametros.codProprietario=${clientCode}&Parametros.tipoFiltro=1`,
+      );
+      if (response.status !== 200) {
+        throw new Error(translationService.get('documentError'));
+      }
+    } catch (e) {
+      if (e.response) {
+        throw new Error(translationService.get('documentError'));
+      }
+      throw e;
     }
     this.__data = response.data.Dados.map(data => ({
       title: data.DescrTipoDocumentoWeb,

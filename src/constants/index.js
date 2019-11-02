@@ -68,7 +68,7 @@ export const DASHBOARD_STATUS_LIST = {
   Indisponível: '#2196F3',
 };
 
-export const DASHBOARD_REPORTS_LIST = {
+export const REPORTS_LIST = {
   revenue: 'rgb(93,203,156)',
   expense: 'rgb(236,89,86)',
   income: 'rgb(243,171,123)',
@@ -78,6 +78,14 @@ export const DOCUMENT_FILE_LIST = {
   pdf: PDF,
   doc: DOC,
 };
+
+export const REPORTS_TABLE_LIST = ['name', 'income', 'status'];
+export const REPORTS_TABLE_EXTENDED_LIST = [
+  'tenant',
+  'contractDate',
+  'revenue',
+  'expense',
+];
 
 export const AUTH_SERVICE_KEY = 'AUTH_SERVICE';
 export const USER_INFORMATION_SERVICE_KEY = 'USER_INFORMATION_SERVICE';
