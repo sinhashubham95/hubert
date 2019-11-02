@@ -213,7 +213,7 @@ class Dashboard extends Component {
         ]}>
         <Text>{translationService.get(name)}</Text>
         <Text>
-          R$ {this.format(DashboardService.reports[selectedDate][name])}
+          {this.format(DashboardService.reports[selectedDate][name])}
         </Text>
       </View>
     );
