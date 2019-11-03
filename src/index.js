@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import 'react-native-gesture-handler';
-import {Provider, DarkTheme} from 'react-native-paper';
+import {Provider} from 'react-native-paper';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
