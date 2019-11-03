@@ -84,11 +84,13 @@ class ReportService {
     this.__properties = responses.map((res, ind) => ({
       code: res.data.Dados.Imovel.CodImovel,
       name: res.data.Dados.Imovel.NomeImovel,
-      status: res.data.Dados.Imovel.Situacao,
+      status:
+        res.data.Dados.Imovel.Situacao === 'ALUGADO'
+          ? `${res.data.Dados.Imovel.Situacao} ${
+              res.data.Dados.Imovel.SituacaoContrato
+            }`
+          : res.data.Dados.Imovel.Situacao,
       tenant: res.data.Dados.Imovel.Inquilino,
-      contractStatus: res.data.Dados.Imovel.SituacaoContrato
-        ? res.data.Dados.Imovel.SituacaoContrato
-        : res.data.Dados.Imovel.Situacao,
       contractDate: momemt(res.data.Dados.Imovel.ValidadeContrato).format(
         'DD/MM/YYYY',
       ),
