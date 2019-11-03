@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   withTheme,
   Card,
-  Button,
   Portal,
   Dialog,
   RadioButton,
@@ -20,6 +19,7 @@ import {
 import Snackbar from 'react-native-snackbar';
 import momemt from 'moment';
 
+import Button from '../components/button';
 import Icon from '../components/icon';
 
 import translationService from '../utils/translationService';

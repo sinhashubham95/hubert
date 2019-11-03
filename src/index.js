@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import 'react-native-gesture-handler';
-import {Provider, DefaultTheme, DarkTheme} from 'react-native-paper';
+import {Provider, DarkTheme} from 'react-native-paper';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -78,7 +78,9 @@ export default class App extends Component {
 
   render() {
     const {darkTheme, clientCode} = this.state;
-    const paperTheme = darkTheme ? DarkTheme : DefaultTheme;
+    const paperTheme = darkTheme
+      ? constants.DARK_PAPER_THEME
+      : constants.LIGHT_PAPER_THEME;
     const rootTheme = darkTheme ? constants.DARK_THEME : constants.LIGHT_THEME;
     return (
       <Provider theme={paperTheme}>

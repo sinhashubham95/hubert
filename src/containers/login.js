@@ -8,7 +8,9 @@ import {
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 
-import {TextInput, Button, withTheme, Headline} from 'react-native-paper';
+import {TextInput, withTheme, Headline} from 'react-native-paper';
+
+import Button from '../components/button';
 
 import logo from '../assets/logo.png';
 

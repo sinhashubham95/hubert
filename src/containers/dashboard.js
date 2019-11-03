@@ -12,7 +12,6 @@ import {
   Card,
   ProgressBar,
   Text,
-  Button,
   Portal,
   Dialog,
   RadioButton,
@@ -21,6 +20,7 @@ import PieChart from 'react-native-pie-chart';
 import PureChart from 'react-native-pure-chart';
 import Snackbar from 'react-native-snackbar';
 
+import Button from '../components/button';
 import Icon from '../components/icon';
 
 import {formatCurrency} from '../utils';

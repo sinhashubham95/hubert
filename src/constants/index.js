@@ -1,3 +1,5 @@
+import {DarkTheme, DefaultTheme} from 'react-native-paper';
+
 import PDF from '../assets/pdf.png';
 import DOC from '../assets/doc.png';
 
@@ -92,3 +94,17 @@ export const USER_INFORMATION_SERVICE_KEY = 'USER_INFORMATION_SERVICE';
 
 export const NAVIGATION_DASHBOARD = 'Dashboard';
 export const NAVIGATION_LOGIN = 'Login';
+
+export const LIGHT_PAPER_THEME = Object.assign({}, DefaultTheme, {
+  colors: Object.assign({}, DefaultTheme.colors, {
+    primary: 'rgb(51,126,241)',
+    element: DefaultTheme.colors.surface,
+  }),
+});
+
+export const DARK_PAPER_THEME = Object.assign({}, DarkTheme, {
+  colors: Object.assign({}, DarkTheme.colors, {
+    primary: 'rgb(31,30,36)',
+    element: DefaultTheme.colors.surface,
+  }),
+});

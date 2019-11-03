@@ -19,7 +19,7 @@ const Icon = props => {
   const IconSet = ICON_SETS[type];
   let color = theme.colors.text;
   if (secondary) {
-    color = theme.colors.surface;
+    color = theme.colors.element;
   }
   return <IconSet name={name} color={color} {...rest} />;
 };

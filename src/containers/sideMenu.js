@@ -8,13 +8,13 @@ import {
   Title,
   Headline,
   Caption,
-  Button,
   Divider,
   List,
   Switch,
   ActivityIndicator,
 } from 'react-native-paper';
 
+import Button from '../components/button';
 import AuthService from '../utils/authService';
 import UserInformationService from '../utils/userInformationService';
 import * as constants from '../constants';

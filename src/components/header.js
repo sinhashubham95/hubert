@@ -13,11 +13,12 @@ const useStyles = theme =>
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
+      backgroundColor: theme.colors.primary,
     },
     headerImage: {
       width: '80%',
       height: '100%',
-      tintColor: theme.colors.text,
+      tintColor: theme.colors.element,
       resizeMode: 'contain',
     },
     menu: {
@@ -37,7 +38,7 @@ class Header extends Component {
     return (
       <View style={styles.header}>
         <TouchableOpacity style={styles.menu} onPress={this.onMenuPress}>
-          <Icon type="md" name="menu" size={24} />
+          <Icon type="md" name="menu" size={24} secondary />
         </TouchableOpacity>
         <Image source={logo} style={styles.headerImage} />
       </View>
