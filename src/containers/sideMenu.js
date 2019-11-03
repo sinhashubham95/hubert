@@ -150,6 +150,7 @@ class SideMenu extends Component {
         <View style={styles.selections}>
           <List.Accordion
             title={client}
+            description={translationService.get('clientCode')}
             expanded={showClients}
             onPress={this.onShowClients}>
             {UserInformationService.data.clients.map(this.renderClient)}
@@ -164,9 +165,10 @@ class SideMenu extends Component {
           <Switch
             value={screenProps.darkTheme}
             onValueChange={this.onThemeChange}
-            color={theme.colors.primary}
+            color={theme.colors.switch}
           />
         </View>
+        <Divider style={styles.divider} />
       </View>
     );
   }
@@ -192,6 +194,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     width: '100%',
+    height: 2 * StyleSheet.hairlineWidth,
   },
   buttons: {
     width: '100%',

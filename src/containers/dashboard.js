@@ -243,7 +243,7 @@ class Dashboard extends Component {
         refreshControl={this.renderRefreshControl()}>
         <Card>
           <Card.Title title={translationService.get('rentalStatus')} />
-          <Divider />
+          <Divider style={styles.divider} />
           <View style={styles.pieContainer}>
             <PieChart
               style={styles.pie}
@@ -268,11 +268,9 @@ class Dashboard extends Component {
             />
             {this.renderDateSelector()}
           </View>
-          <Divider />
+          <Divider style={styles.divider} />
           <View style={styles.reportAmount}>
-            {Object.keys(constants.REPORTS_LIST).map(
-              this.renderReportAmount,
-            )}
+            {Object.keys(constants.REPORTS_LIST).map(this.renderReportAmount)}
           </View>
           <View style={styles.chartContainer}>{this.renderReportChart()}</View>
         </Card>
@@ -300,9 +298,13 @@ const useStyles = (theme, width) =>
       marginVertical: 16,
       marginHorizontal: width * 0.05,
     },
+    divider: {
+      width: '100%',
+      height: 2 * StyleSheet.hairlineWidth,
+    },
     verticalDivider: {
       height: '100%',
-      width: StyleSheet.hairlineWidth,
+      width: 2 * StyleSheet.hairlineWidth,
     },
     progress: {
       flexDirection: 'column',

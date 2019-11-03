@@ -99,6 +99,7 @@ export const LIGHT_PAPER_THEME = Object.assign({}, DefaultTheme, {
   colors: Object.assign({}, DefaultTheme.colors, {
     primary: 'rgb(51,126,241)',
     element: DefaultTheme.colors.surface,
+    switch: 'rgb(51,126,241)',
   }),
 });
 
@@ -106,5 +107,6 @@ export const DARK_PAPER_THEME = Object.assign({}, DarkTheme, {
   colors: Object.assign({}, DarkTheme.colors, {
     primary: 'rgb(31,30,36)',
     element: DefaultTheme.colors.surface,
+    switch: DefaultTheme.colors.surface,
   }),
 });

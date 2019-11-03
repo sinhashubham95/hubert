@@ -297,11 +297,11 @@ class Report extends Component {
             />
             {this.renderDateSelector()}
           </View>
-          <Divider />
+          <Divider style={styles.divider} />
           <View style={styles.amount}>
             {Object.keys(constants.REPORTS_LIST).map(this.renderReportAmount)}
           </View>
-          <Divider />
+          <Divider style={styles.divider} />
           {this.renderProperties()}
         </Card>
       </ScrollView>
@@ -347,6 +347,10 @@ const useStyles = (theme, width) =>
       alignItems: 'center',
       borderRadius: 2,
       elevation: 2,
+    },
+    divider: {
+      width: '100%',
+      height: 2 * StyleSheet.hairlineWidth,
     },
   });
 
