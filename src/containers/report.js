@@ -244,20 +244,18 @@ class Report extends Component {
           visible={this.state.propertyExpand[index]}
           onDismisss={this.onPropertyClick(index)}>
           <Dialog.Title>{property.name}</Dialog.Title>
-          <Dialog.Content>
-            <DataTable>
-              <DataTable.Header>
-                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                  this.renderPropertyHeader,
-                )}
-              </DataTable.Header>
-              <DataTable.Row>
-                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                  this.renderPropertyCell(property),
-                )}
-              </DataTable.Row>
-            </DataTable>
-          </Dialog.Content>
+          <DataTable>
+            <DataTable.Header>
+              {constants.REPORTS_TABLE_EXTENDED_LIST.map(
+                this.renderPropertyHeader,
+              )}
+            </DataTable.Header>
+            <DataTable.Row>
+              {constants.REPORTS_TABLE_EXTENDED_LIST.map(
+                this.renderPropertyCell(property),
+              )}
+            </DataTable.Row>
+          </DataTable>
           <Dialog.Actions>
             <Button onPress={this.onPropertyClick(index)}>
               {translationService.get('ok')}
