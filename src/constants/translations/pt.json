@@ -13,6 +13,12 @@
     "darkThemeCaption": "Cor de fundo escura",
     "rentalStatus": "Situação",
     "reportClosing": "Demonstrativo Por Depósito",
-    "dateSelector": "Selecionar"
+    "dateSelector": "Selecionar",
+    "cancel": "CANCELAR",
+    "ok": "Está bem",
+    "neutral": "PERGUNTE-ME DEPOIS",
+    "revenue": "Receita",
+    "expense": "Despesa",
+    "income": "Resultado"
   }
 }

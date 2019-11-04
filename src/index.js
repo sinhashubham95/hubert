@@ -29,8 +29,8 @@ const Root = createAppContainer(
             Tabs: createMaterialBottomTabNavigator(
               {
                 Dashboard,
-                Report,
-                Document,
+                Finanças: Report,
+                Documentos: Document,
               },
               {
                 backBehavior: 'history',
