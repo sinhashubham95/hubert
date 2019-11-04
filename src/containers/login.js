@@ -84,7 +84,10 @@ class Login extends Component {
     return (
       <KeyboardAvoidingView style={styles.container}>
         <Image source={logo} style={styles.logo} />
-        <Headline>{translationService.get('appTitle')}</Headline>
+        <Headline style={styles.primaryTitle}>
+          {translationService.get('appTitlePrimary')}
+        </Headline>
+        <Headline>{translationService.get('appTitleSecondary')}</Headline>
         <View style={styles.form}>
           {constants.LOGIN_FORM.map(this.renderFormInput)}
           <Button
@@ -124,6 +127,9 @@ const useStyles = theme =>
     },
     button: {
       marginTop: 16,
+    },
+    primaryTitle: {
+      color: theme.colors.primary,
     },
   });
 

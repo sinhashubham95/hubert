@@ -1,6 +1,7 @@
 {
   "default": {
-    "appTitle": "PROPERTY MANAGEMENT",
+    "appTitlePrimary": "PROPERTY",
+    "appTitleSecondary": "ADMINISTRATION",
     "username": "Username",
     "password": "Password",
     "logIn": "LOG IN",

@@ -1,3 +1,7 @@
+import Restart from 'react-native-restart';
+import authService from './authService';
+import userInformationService from './userInformationService';
+
 export const formatCurrency = value => {
   let split = `${value}`.split('.');
   let [l, r] = split;
@@ -13,4 +17,10 @@ export const formatCurrency = value => {
     fl = fl + l[i];
   }
   return `R$ ${fl},${r}`;
+};
+
+export const restart = async () => {
+  await authService.clear();
+  Restart.restart();
+  await userInformationService.clear();
 };

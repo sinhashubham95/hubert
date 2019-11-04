@@ -3,6 +3,7 @@ import QS from 'qs';
 
 import * as constants from '../constants';
 
+import {restart} from './index';
 import Service from './service';
 import translationService from './translationService';
 
@@ -79,6 +80,10 @@ class AuthService extends Service {
       this.data.token
     }`;
     Axios.defaults.baseURL = 'https://api-test.hubert.com.br/api';
+    Axios.interceptors.response.use(null, e => {
+      restart();
+      return Promise.reject(e);
+    });
   }
 }
 
