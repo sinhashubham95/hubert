@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import moment from 'moment';
+import uuidv5 from 'uuid/v5';
 import translationService from './translationService';
 
 class DocumentService {
@@ -26,6 +27,7 @@ class DocumentService {
       title: data.DescrTipoDocumentoWeb,
       description: data.Observacao,
       url: data.UrlArquivo,
+      fileDetails: this.__getFileDetails(data.UrlArquivo),
       date: moment(data.DataInclusao).format('DD/MM/YYYY'),
       key: `document-${data.Id}`,
       type: data.UrlArquivo.substr(
@@ -37,6 +39,13 @@ class DocumentService {
   get data() {
     return this.__data;
   }
+
+  __getFileDetails = url => {
+    return {
+      extension: url.substr(url.lastIndexOf('.') + 1).toLowerCase(),
+      name: uuidv5(url, uuidv5.URL),
+    };
+  };
 }
 
 export default new DocumentService();

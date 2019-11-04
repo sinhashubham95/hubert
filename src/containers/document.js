@@ -86,12 +86,21 @@ class Document extends Component {
   };
 
   downloadDocument = document => async () => {
+    const {
+      dirs: {DownloadDir, DocumentDir},
+    } = Fetch.fs;
+    const folder = Platform.select({ios: DocumentDir, android: DownloadDir});
+    const path = `${folder}/${document.fileDetails.name}.${
+      document.fileDetails.extension
+    }`;
     try {
       await Fetch.config({
         fileCache: true,
+        path,
         addAndroidDownloads: {
           useDownloadManager: true,
           notification: true,
+          path,
         },
       })
         .fetch('GET', document.url, {

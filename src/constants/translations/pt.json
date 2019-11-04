@@ -4,6 +4,12 @@
     "appTitleSecondary": "DE IMÓVEIS",
     "username": "Usuario",
     "password": "Senha",
-    "logIn": "LOG IN"
+    "logIn": "ENTRAR",
+    "notAvailable": "Essa funcionalidade estará disponível em breve.",
+    "changePassword": "Trocar Senha",
+    "logout": "Sair",
+    "clientCode": "Selecionar",
+    "darkTheme": "Tema Escuro",
+    "darkThemeCaption": "Cor de fundo escura"
   }
 }
