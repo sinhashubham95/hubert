@@ -88,8 +88,10 @@ class Document extends Component {
   downloadDocument = document => async () => {
     try {
       await Fetch.config({
+        fileCache: true,
         addAndroidDownloads: {
           useDownloadManager: true,
+          notification: true,
         },
       })
         .fetch('GET', document.url, {
