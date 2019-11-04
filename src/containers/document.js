@@ -15,14 +15,16 @@ import {
   Dimensions,
   View,
   PermissionsAndroid,
+  Platform,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
-import Fetch from 'react-native-fetch-blob';
+import Fetch from 'rn-fetch-blob';
 
 import Icon from '../components/icon';
 import * as constants from '../constants';
 import DocumentService from '../utils/documentService';
 import AuthService from '../utils/authService';
+import translationService from "../utils/translationService";
 
 class Document extends Component {
   static navigationOptions = {
@@ -58,12 +60,17 @@ class Document extends Component {
 
   onDocumentClick = document => async () => {
     try {
-      const grantedExternalRead = await this.checkPermissionExternalRead();
-      const grantedExternalWrite = await this.checkPermissionExternalWrite();
-      if (
-        grantedExternalRead === PermissionsAndroid.RESULTS.GRANTED &&
-        grantedExternalWrite === PermissionsAndroid.RESULTS.GRANTED
-      ) {
+      const grantedExternalRead = await this.checkPermission(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        'readPermissionTitle',
+        'readPermissionMessage',
+      );
+      const grantedExternalWrite = await this.checkPermission(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        'writePermissionTitle',
+        'writePermissionMessage',
+      );
+      if (grantedExternalRead && grantedExternalWrite) {
         // we can go ahead and download the file now
         let {documents} = this.state;
         documents = Object.assign({}, documents);
@@ -103,31 +110,24 @@ class Document extends Component {
     this.setState({documents});
   };
 
-  checkPermissionExternalRead = () =>
-    PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      {
-        title: 'Read External Storage',
-        message:
-          'Allow access to read external storage for saving the document.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-
-  checkPermissionExternalWrite = () =>
-    PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        title: 'Read External Storage',
-        message:
-          'Allow access to write external storage for saving the document.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
+  checkPermission = async (name, title, messsage) => {
+    if (Platform.OS !== 'android') {
+      return true;
+    }
+    try {
+      const granted = await PermissionsAndroid.request(name, {
+        title: translationService.get(title),
+        message: translationService.get(messsage),
+        buttonNeutral: translationService.get('neutral'),
+        buttonNegative: translationService.get('cancel'),
+        buttonPositive: translationService.get('ok'),
+      });
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  };
 
   updateProgress = document => (received, total) => {
     let {documents} = this.state;

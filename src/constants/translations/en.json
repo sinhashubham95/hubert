@@ -24,6 +24,7 @@
     "dateSelector": "Choose a Date",
     "cancel": "CANCEL",
     "ok": "OK",
+    "neutral": "ASK ME LATER",
     "revenue": "Revenue",
     "expense": "Expense",
     "income": "Income",
@@ -38,6 +39,10 @@
     "name": "Property",
     "status": "Status",
     "tenant": "Tenant",
-    "contractDate": "Contract Date"
+    "contractDate": "Contract Date",
+    "readPermissionTitle": "Read External Storage",
+    "readPermissionMessage": "Allow access to read external storage for saving the document.",
+    "writePermissionTitle": "Write External Storage",
+    "writePermissionMessage": "Allow access to write external storage for saving the document."
   }
 }
