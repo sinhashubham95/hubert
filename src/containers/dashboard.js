@@ -120,9 +120,10 @@ class Dashboard extends Component {
     const styles = useStyles(theme);
     return (
       <View key={value.key} style={styles.bar}>
-        <Text style={styles.barText}>
-          {translationService.get(value.title)}
-        </Text>
+        <View style={styles.barText}>
+          <Text>{value.title}</Text>
+          <Text>{value.count}</Text>
+        </View>
         <ProgressBar progress={value.percentage / 100.0} color={value.color} />
       </View>
     );
@@ -242,7 +243,10 @@ class Dashboard extends Component {
         style={styles.container}
         refreshControl={this.renderRefreshControl()}>
         <Card>
-          <Card.Title title={translationService.get('rentalStatus')} />
+          <Card.Title
+            title={translationService.get('rentalStatus')}
+            titleStyle={styles.headerTitle}
+          />
           <Divider style={styles.divider} />
           <View style={styles.pieContainer}>
             <PieChart
@@ -265,6 +269,7 @@ class Dashboard extends Component {
             <Card.Title
               style={styles.reportHeaderTitle}
               title={translationService.get('reportClosing')}
+              titleStyle={styles.headerTitle}
             />
             {this.renderDateSelector()}
           </View>
@@ -283,6 +288,9 @@ const useStyles = (theme, width) =>
   StyleSheet.create({
     container: {
       flex: 1,
+    },
+    headerTitle: {
+      fontSize: 16,
     },
     loading: {
       width: '100%',
@@ -318,6 +326,8 @@ const useStyles = (theme, width) =>
     },
     barText: {
       marginBottom: 4,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
     reports: {
       marginTop: 8,
@@ -328,11 +338,11 @@ const useStyles = (theme, width) =>
       alignItems: 'center',
     },
     reportHeaderTitle: {
-      width: width * 0.65,
+      width: width * 0.6,
       marginRight: width * 0.05,
     },
     reportDateSelector: {
-      width: width * 0.25,
+      width: width * 0.3,
       marginRight: width * 0.05,
     },
     reportDateRadio: {

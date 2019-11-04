@@ -10,6 +10,9 @@
     "logout": "Sair",
     "clientCode": "Selecionar",
     "darkTheme": "Tema Escuro",
-    "darkThemeCaption": "Cor de fundo escura"
+    "darkThemeCaption": "Cor de fundo escura",
+    "rentalStatus": "Situação",
+    "reportClosing": "Demonstrativo Por Depósito",
+    "dateSelector": "Selecionar"
   }
 }
