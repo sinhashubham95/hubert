@@ -58,8 +58,8 @@ class AuthService extends Service {
         throw new Error(translationService.get('invalidLogin'));
       }
     } catch (e) {
-      if (e.response) {
-        throw new Error(translationService.get('invalidLogin'));
+      if (e.response && e.response.data && e.response.data.error_description) {
+        throw new Error(e.response.data.error_description);
       }
       throw e;
     }
