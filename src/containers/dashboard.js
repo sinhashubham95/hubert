@@ -15,11 +15,12 @@ import {
   Portal,
   Dialog,
   RadioButton,
+  TouchableRipple,
 } from 'react-native-paper';
-import PieChart from 'react-native-pie-chart';
 import PureChart from 'react-native-pure-chart';
 import Snackbar from 'react-native-snackbar';
 
+import PieChart from '../components/pie';
 import Button from '../components/button';
 import Icon from '../components/icon';
 
@@ -40,6 +41,7 @@ class Dashboard extends Component {
       selectedDate: '',
       radioDate: '',
       showSelectedDates: false,
+      highlightedIndex: 0,
     };
   }
 
@@ -56,6 +58,11 @@ class Dashboard extends Component {
   }
 
   onRadioDateChange = value => this.setState({radioDate: value});
+
+  onHighlightedIndexChange = index => {
+    console.log('called', index);
+    this.setState({highlightedIndex: index});
+  };
 
   fetchDataWithLoading = () => {
     this.setState({loading: true}, this.fetchData);
@@ -77,6 +84,7 @@ class Dashboard extends Component {
       loading: false,
       selectedDate: dates[0] || '',
       radioDate: dates[0] || '',
+      highlightedIndex: 0,
     });
   };
 
@@ -124,7 +132,10 @@ class Dashboard extends Component {
           <Text>{value.title}</Text>
           <Text>{value.count}</Text>
         </View>
-        <ProgressBar progress={value.percentage / 100.0} color={value.color} />
+        <ProgressBar
+          progress={value.percentage / 100.0}
+          color={value.color}
+        />
       </View>
     );
   };
@@ -229,15 +240,15 @@ class Dashboard extends Component {
 
   render() {
     const {theme} = this.props;
+    const {highlightedIndex} = this.state;
     const width = Dimensions.get('window').width;
     const styles = useStyles(theme, width);
     const values = Object.values(DashboardService.data);
-    const series = Object.values(DashboardService.data).map(
-      value => value.percentage,
-    );
-    const colors = Object.values(DashboardService.data).map(
-      value => value.color,
-    );
+    const series = Object.values(DashboardService.data).map(value => ({
+      value: value.percentage,
+      label: value.title,
+      color: value.color,
+    }));
     return (
       <ScrollView
         style={styles.container}
@@ -251,12 +262,12 @@ class Dashboard extends Component {
           <View style={styles.pieContainer}>
             <PieChart
               style={styles.pie}
-              series={series}
-              sliceColor={colors}
-              chart_wh={width * 0.4}
-              doughnut
-              coverRadius={0.9}
-              coverFill={theme.colors.surface}
+              data={series}
+              width={width * 0.5}
+              height={width * 0.5}
+              margin={width * 0.05}
+              cover={width * 0.02}
+              selectionRaise={width * 0.01}
             />
             <Divider style={styles.verticalDivider} />
             <View style={styles.progress}>
@@ -303,8 +314,7 @@ const useStyles = (theme, width) =>
       width: '100%',
     },
     pie: {
-      marginVertical: 16,
-      marginHorizontal: width * 0.05,
+      width: width * 0.5,
     },
     divider: {
       width: '100%',
