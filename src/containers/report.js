@@ -45,7 +45,9 @@ class Report extends Component {
   }
 
   componentDidMount() {
-    this.fetchDatesWithLoading();
+    if (this.props.screenProps.clientCode) {
+      this.fetchDatesWithLoading();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {

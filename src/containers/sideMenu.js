@@ -19,6 +19,7 @@ import AuthService from '../utils/authService';
 import UserInformationService from '../utils/userInformationService';
 import * as constants from '../constants';
 import translationService from '../utils/translationService';
+import localStorageService from '../utils/localStorageService';
 
 class SideMenu extends Component {
   constructor(props) {
@@ -80,7 +81,7 @@ class SideMenu extends Component {
       try {
         await AuthService.clear(key);
         this.props.navigation.navigate(constants.NAVIGATION_LOGIN);
-        await UserInformationService.clear(key);
+        await localStorageService.clearAll();
       } catch (e) {
         this.showError(e.message);
         next();

@@ -36,6 +36,8 @@ target 'hubert' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RCTRestart', :path => '../node_modules/react-native-restart'
+
   target 'hubertTests' do
     inherit! :search_paths
     # Pods for testing

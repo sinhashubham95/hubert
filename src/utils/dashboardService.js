@@ -1,11 +1,25 @@
 import Axios from 'axios';
 import * as constants from '../constants';
+import localStorageService from './localStorageService';
 import translationService from './translationService';
 
 class DashboardService {
   constructor() {
     this.__data = {};
     this.__reports = {};
+    this.__dataStorageKey = constants.DASHBOARD_DATA_SERVICE_KEY;
+    this.__reportStorageKey = constants.DASHBOARD_REPORT_SERVICE_KEY;
+  }
+
+  async init(clientCode) {
+    let cachedData = await localStorageService.get(
+      `${this.__dataStorageKey}/${clientCode}`,
+    );
+    let cachedReports = await localStorageService.get(
+      `${this.__reportStorageKey}/${clientCode}`,
+    );
+    this.__data = cachedData || {};
+    this.__reports = cachedReports || {};
   }
 
   async get(clientCode) {
@@ -51,6 +65,14 @@ class DashboardService {
         income: values[i].Total,
       };
     }
+    await localStorageService.set(
+      `${this.__dataStorageKey}/${clientCode}`,
+      this.__data,
+    );
+    await localStorageService.set(
+      `${this.__reportStorageKey}/${clientCode}`,
+      this.__reports,
+    );
     return {
       data: this.__data,
       reports: this.__reports,

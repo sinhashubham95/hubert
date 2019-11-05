@@ -24,7 +24,7 @@ import Icon from '../components/icon';
 import * as constants from '../constants';
 import DocumentService from '../utils/documentService';
 import AuthService from '../utils/authService';
-import translationService from "../utils/translationService";
+import translationService from '../utils/translationService';
 
 class Document extends Component {
   static navigationOptions = {
@@ -42,15 +42,21 @@ class Document extends Component {
     super(props);
     this.state = {
       loading: false,
+      init: false,
       documents: {},
     };
   }
 
   componentDidMount() {
-    this.fetchDataWithLoading();
+    if (this.props.screenProps.clientCode) {
+      this.fetchDataWithLoading();
+    }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.init && this.state.init) {
+      this.fetchDataWithLoading();
+    }
     if (
       prevProps.screenProps.clientCode !== this.props.screenProps.clientCode
     ) {
@@ -151,7 +157,35 @@ class Document extends Component {
   };
 
   fetchDataWithLoading = () => {
+    if (!this.state.init) {
+      (async () => {
+        await this.fetchCachedData();
+      })();
+      return;
+    }
     this.setState({loading: true}, this.fetchData);
+  };
+
+  fetchCachedData = async () => {
+    const {screenProps} = this.props;
+    const {clientCode} = screenProps;
+    try {
+      await DocumentService.init(clientCode);
+    } catch (e) {
+      this.showError(e.message);
+    }
+    const docs = DocumentService.data;
+    const documents = {};
+    for (let i = 0; i < docs.length; i += 1) {
+      documents[docs[i].key] = {
+        downloadInProgress: false,
+        downloadProgress: 0,
+      };
+    }
+    this.setState({
+      documents,
+      init: true,
+    });
   };
 
   fetchData = async () => {

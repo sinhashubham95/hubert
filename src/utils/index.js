@@ -1,6 +1,6 @@
 import Restart from 'react-native-restart';
 import authService from './authService';
-import userInformationService from './userInformationService';
+import localStorageService from './localStorageService';
 
 export const formatCurrency = value => {
   let split = `${value}`.split('.');
@@ -30,6 +30,6 @@ export const formatPercentage = value => {
 
 export const restart = async () => {
   await authService.clear();
-  Restart.restart();
-  await userInformationService.clear();
+  Restart.Restart();
+  await localStorageService.clearAll();
 };

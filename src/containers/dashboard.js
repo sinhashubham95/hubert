@@ -38,6 +38,7 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       loading: false,
+      init: false,
       selectedDate: '',
       radioDate: '',
       showSelectedDates: false,
@@ -46,10 +47,15 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.fetchDataWithLoading();
+    if (this.props.screenProps.clientCode) {
+      this.fetchDataWithLoading();
+    }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.init && this.state.init) {
+      this.fetchDataWithLoading();
+    }
     if (
       prevProps.screenProps.clientCode !== this.props.screenProps.clientCode
     ) {
@@ -62,7 +68,28 @@ class Dashboard extends Component {
   onHighlightedIndexChange = index => this.setState({highlightedIndex: index});
 
   fetchDataWithLoading = () => {
+    if (!this.state.init) {
+      (async () => {
+        await this.fetchCachedData();
+      })();
+      return;
+    }
     this.setState({loading: true}, this.fetchData);
+  };
+
+  fetchCachedData = async () => {
+    try {
+      await DashboardService.init(this.props.screenProps.clientCode);
+    } catch (e) {
+      this.showError(e.message);
+    }
+    const dates = Object.keys(DashboardService.reports);
+    this.setState({
+      init: true,
+      selectedDate: dates[0] || '',
+      radioDate: dates[0] || '',
+      highlightedIndex: 0,
+    });
   };
 
   fetchData = async () => {
@@ -115,7 +142,7 @@ class Dashboard extends Component {
 
   renderRefreshControl = () => (
     <RefreshControl
-      refreshing={this.state.loading}
+      refreshing={this.state.loading || !this.state.init}
       onRefresh={this.fetchDataWithLoading}
     />
   );
@@ -140,7 +167,11 @@ class Dashboard extends Component {
     const styles = useStyles(theme, width);
     const {selectedDate, showSelectedDates, radioDate} = this.state;
     const dates = Object.keys(DashboardService.reports);
-    if (!dates.length) {
+    if (
+      !dates.length ||
+      !DashboardService.reports ||
+      !DashboardService.reports[selectedDate]
+    ) {
       return null;
     }
     return (
@@ -191,7 +222,11 @@ class Dashboard extends Component {
     const styles = useStyles(theme, width);
     const {selectedDate} = this.state;
     const dates = Object.keys(DashboardService.reports);
-    if (!dates.length) {
+    if (
+      !dates.length ||
+      !DashboardService.reports ||
+      !DashboardService.reports[selectedDate]
+    ) {
       return null;
     }
     return (
@@ -211,7 +246,12 @@ class Dashboard extends Component {
 
   renderReportChart = () => {
     const dates = Object.keys(DashboardService.reports);
-    if (!dates.length) {
+    const {selectedDate} = this.state;
+    if (
+      !dates.length ||
+      !DashboardService.reports ||
+      !DashboardService.reports[selectedDate]
+    ) {
       return null;
     }
     const reports = Object.keys(constants.REPORTS_LIST).map(name => ({

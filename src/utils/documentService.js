@@ -2,10 +2,20 @@ import Axios from 'axios';
 import moment from 'moment';
 import uuidv5 from 'uuid/v5';
 import translationService from './translationService';
+import localStorageService from './localStorageService';
+import * as constants from '../constants';
 
 class DocumentService {
   constructor() {
     this.__data = [];
+    this.__storageKey = constants.DOCUMENT_SERVICE_KEY;
+  }
+
+  async init(clientCode) {
+    let cachedData = await localStorageService.get(
+      `${this.__storageKey}/${clientCode}`,
+    );
+    this.__data = cachedData || [];
   }
 
   async get(clientCode) {
@@ -34,6 +44,10 @@ class DocumentService {
         data.UrlArquivo.lastIndexOf('.') + 1,
       ).toLowerCase(),
     }));
+    await localStorageService.set(
+      `${this.__storageKey}/${clientCode}`,
+      this.__data,
+    );
   }
 
   get data() {
