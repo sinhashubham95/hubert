@@ -3,6 +3,8 @@ import momemt from 'moment';
 
 import {formatCurrency} from './index';
 import translationService from './translationService';
+import * as constants from '../constants';
+import localStorageService from './localStorageService';
 
 class ReportService {
   constructor() {
@@ -11,6 +13,28 @@ class ReportService {
     this.__revenue = '';
     this.__income = '';
     this.__properties = [];
+    this.__datesStorageKey = constants.REPORT_DATES_SERVICE_KEY;
+    this.__propertiesStorageKey = constants.REPORT_PROPERTIES_SERVICE_KEY;
+  }
+
+  async initDates(clientCode) {
+    const cachedDates = await localStorageService.get(
+      `${this.__datesStorageKey}/${clientCode}`,
+    );
+    this.__dates = cachedDates || [];
+  }
+
+  async initRentalDetails(clientCode, selectedDate) {
+    const cachedRentalDetails = await localStorageService.get(
+      `${this.__propertiesStorageKey}/${clientCode}/${selectedDate}`,
+    );
+    if (!cachedRentalDetails) {
+      return;
+    }
+    this.__expense = cachedRentalDetails.expense || '';
+    this.__revenue = cachedRentalDetails.revenue || '';
+    this.__income = cachedRentalDetails.income || '';
+    this.__properties = cachedRentalDetails.properties || [];
   }
 
   async getDates(clientCode) {
@@ -29,6 +53,10 @@ class ReportService {
       throw e;
     }
     this.__dates = response.data.Dados.map(value => value.DataDeposito);
+    await localStorageService.set(
+      `${this.__datesStorageKey}/${clientCode}`,
+      this.__dates,
+    );
     return this.__dates;
   }
 
@@ -104,7 +132,15 @@ class ReportService {
         response.data.Dados.Prestacoes[0].Imoveis[ind].TotalImovel,
       ),
     }));
-    console.log(this.__properties);
+    await localStorageService.set(
+      `${this.__propertiesStorageKey}/${clientCode}/${selectedDate}`,
+      {
+        expense: this.__expense,
+        revenue: this.__revenue,
+        income: this.__income,
+        properties: this.__properties,
+      },
+    );
     return this.__properties;
   }
 

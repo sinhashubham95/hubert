@@ -222,7 +222,7 @@ class Document extends Component {
 
   renderRefreshControl = () => (
     <RefreshControl
-      refreshing={this.state.loading}
+      refreshing={this.state.loading || !this.state.init}
       onRefresh={this.fetchDataWithLoading}
     />
   );

@@ -37,6 +37,7 @@ class Report extends Component {
     super(props);
     this.state = {
       loading: false,
+      init: false,
       selectedDate: '',
       radioDate: '',
       showSelectedDates: false,
@@ -46,18 +47,18 @@ class Report extends Component {
 
   componentDidMount() {
     if (this.props.screenProps.clientCode) {
-      this.fetchDatesWithLoading();
+      this.fetchDataWithLoading();
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (!prevState.init && this.state.init) {
+      this.fetchDataWithLoading();
+    }
     if (
       prevProps.screenProps.clientCode !== this.props.screenProps.clientCode
     ) {
-      this.fetchDatesWithLoading();
-    }
-    if (prevState.selectedDate !== this.state.selectedDate) {
-      this.fetchRentalDetailsWithLoading();
+      this.fetchDataWithLoading();
     }
   }
 
@@ -70,15 +71,45 @@ class Report extends Component {
     this.setState({propertyExpand});
   };
 
-  fetchDatesWithLoading = () => {
-    this.setState({loading: true}, this.fetchDates);
+  fetchDataWithLoading = () => {
+    if (!this.state.init) {
+      (async () => {
+        await this.fetchCachedData();
+      })();
+      return;
+    }
+    this.setState({loading: true}, this.fetchData);
   };
 
-  fetchRentalDetailsWithLoading = () => {
-    this.setState({loading: true}, this.fetchRentalDetails);
+  fetchCachedData = async () => {
+    const {screenProps} = this.props;
+    const {clientCode} = screenProps;
+    try {
+      await reportService.initDates(clientCode);
+    } catch (e) {
+      this.showError(e.message);
+    }
+    const dates = reportService.dates;
+    const selectedDate = dates.length ? dates[0] : '';
+    const radioDate = dates.length ? dates[0] : '';
+    if (selectedDate) {
+      try {
+        await reportService.initRentalDetails(clientCode, selectedDate);
+      } catch (e) {
+        this.showError(e.message);
+      }
+    }
+    const {properties} = reportService;
+    this.setState({
+      init: true,
+      selectedDate,
+      radioDate,
+      showSelectedDates: false,
+      propertyExpand: properties.map(() => false),
+    });
   };
 
-  fetchDates = async () => {
+  fetchData = async () => {
     const {screenProps} = this.props;
     try {
       await reportService.getDates(screenProps.clientCode);
@@ -86,28 +117,24 @@ class Report extends Component {
       this.showError(e.message);
     }
     const dates = reportService.dates;
-    this.setState({
-      loading: false,
-      selectedDate: dates.length ? dates[0] : '',
-      radioDate: dates.length ? dates[0] : '',
-      showSelectedDates: false,
-    });
-  };
-
-  fetchRentalDetails = async () => {
-    const {screenProps} = this.props;
-    const {selectedDate} = this.state;
-    try {
-      await reportService.getRentalDetails(
-        screenProps.clientCode,
-        selectedDate,
-      );
-    } catch (e) {
-      this.showError(e.message);
+    const selectedDate = dates.length ? dates[0] : '';
+    const radioDate = dates.length ? dates[0] : '';
+    if (selectedDate) {
+      try {
+        await reportService.getRentalDetails(
+          screenProps.clientCode,
+          selectedDate,
+        );
+      } catch (e) {
+        this.showError(e.message);
+      }
     }
     const {properties} = reportService;
     this.setState({
       loading: false,
+      selectedDate,
+      radioDate,
+      showSelectedDates: false,
       propertyExpand: properties.map(() => false),
     });
   };
@@ -191,7 +218,7 @@ class Report extends Component {
 
   renderRefreshControl = () => (
     <RefreshControl
-      refreshing={this.state.loading}
+      refreshing={this.state.loading || !this.state.init}
       onRefresh={this.fetchDatesWithLoading}
     />
   );
