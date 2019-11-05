@@ -17,14 +17,14 @@ import {
   RadioButton,
 } from 'react-native-paper';
 import {PieChart} from 'react-native-svg-charts';
-import {Text as SVGText} from 'react-native-svg';
+import {Text as TextArt} from 'react-native-svg';
 import PureChart from 'react-native-pure-chart';
 import Snackbar from 'react-native-snackbar';
 
 import Button from '../components/button';
 import Icon from '../components/icon';
 
-import {formatCurrency} from '../utils';
+import {formatCurrency, formatPercentage} from '../utils';
 import DashboardService from '../utils/dashboardService';
 import * as constants from '../constants';
 import translationService from '../utils/translationService';
@@ -246,7 +246,7 @@ class Dashboard extends Component {
       outerRadius: width * 0.19,
       innerRadius: width * 0.18,
     };
-    const series = Object.values(DashboardService.data).map((value, index) => ({
+    const series = values.map((value, index) => ({
       value: value.percentage,
       label: value.title,
       svg: {
@@ -256,6 +256,9 @@ class Dashboard extends Component {
       arc: highlightedIndex === index ? highlightedArc : arc,
       key: index,
     }));
+    const text = values[highlightedIndex]
+      ? formatPercentage(values[highlightedIndex].percentage.toFixed(2))
+      : '';
     return (
       <ScrollView
         style={styles.container}
@@ -273,7 +276,13 @@ class Dashboard extends Component {
               outerRadius={width * 0.2}
               innerRadius={width * 0.19}
               padAngle={0.05}>
-              <SVGText/>
+              <TextArt
+                fill={theme.colors.text}
+                stroke={theme.colors.text}
+                textAnchor="middle"
+                fontSize={20}>
+                {text}
+              </TextArt>
             </PieChart>
             <Divider style={styles.verticalDivider} />
             <View style={styles.progress}>

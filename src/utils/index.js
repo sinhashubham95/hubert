@@ -19,6 +19,15 @@ export const formatCurrency = value => {
   return `R$ ${fl},${r}`;
 };
 
+export const formatPercentage = value => {
+  let split = `${value}`.split('.');
+  let [l, r] = split;
+  if (!r) {
+    return `${l}%`;
+  }
+  return `${l},${r}%`;
+};
+
 export const restart = async () => {
   await authService.clear();
   Restart.restart();

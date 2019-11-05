@@ -29,7 +29,7 @@
     "reportRentalError": "Error fetching rental reports.",
     "reportPropertyDetailsError": "Error fetching property details.",
     "name": "Property",
-    "status": "Status",
+    "status": "STATUS",
     "tenant": "Tenant",
     "contractDate": "Contract Date",
     "readPermissionTitle": "Read External Storage",
