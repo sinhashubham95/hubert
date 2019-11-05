@@ -292,6 +292,7 @@ class Report extends Component {
         <Card>
           <View style={styles.header}>
             <Card.Title
+              titleStyle={styles.headerTitleDetails}
               style={styles.headerTitle}
               title={translationService.get('reportClosing')}
             />
@@ -322,6 +323,9 @@ const useStyles = (theme, width) =>
     headerTitle: {
       width: width * 0.6,
       marginRight: width * 0.05,
+    },
+    headerTitleDetails: {
+      fontSize: 16,
     },
     dateSelector: {
       width: width * 0.3,
