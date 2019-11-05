@@ -15,12 +15,12 @@ import {
   Portal,
   Dialog,
   RadioButton,
-  TouchableRipple,
 } from 'react-native-paper';
+import {PieChart} from 'react-native-svg-charts';
+import {Text as SVGText} from 'react-native-svg';
 import PureChart from 'react-native-pure-chart';
 import Snackbar from 'react-native-snackbar';
 
-import PieChart from '../components/pie';
 import Button from '../components/button';
 import Icon from '../components/icon';
 
@@ -59,10 +59,7 @@ class Dashboard extends Component {
 
   onRadioDateChange = value => this.setState({radioDate: value});
 
-  onHighlightedIndexChange = index => {
-    console.log('called', index);
-    this.setState({highlightedIndex: index});
-  };
+  onHighlightedIndexChange = index => this.setState({highlightedIndex: index});
 
   fetchDataWithLoading = () => {
     this.setState({loading: true}, this.fetchData);
@@ -132,10 +129,7 @@ class Dashboard extends Component {
           <Text>{value.title}</Text>
           <Text>{value.count}</Text>
         </View>
-        <ProgressBar
-          progress={value.percentage / 100.0}
-          color={value.color}
-        />
+        <ProgressBar progress={value.percentage / 100.0} color={value.color} />
       </View>
     );
   };
@@ -244,10 +238,23 @@ class Dashboard extends Component {
     const width = Dimensions.get('window').width;
     const styles = useStyles(theme, width);
     const values = Object.values(DashboardService.data);
-    const series = Object.values(DashboardService.data).map(value => ({
+    const highlightedArc = {
+      outerRadius: width * 0.2,
+      innerRadius: width * 0.18,
+    };
+    const arc = {
+      outerRadius: width * 0.19,
+      innerRadius: width * 0.18,
+    };
+    const series = Object.values(DashboardService.data).map((value, index) => ({
       value: value.percentage,
       label: value.title,
-      color: value.color,
+      svg: {
+        fill: value.color,
+        onPress: () => this.onHighlightedIndexChange(index),
+      },
+      arc: highlightedIndex === index ? highlightedArc : arc,
+      key: index,
     }));
     return (
       <ScrollView
@@ -263,12 +270,11 @@ class Dashboard extends Component {
             <PieChart
               style={styles.pie}
               data={series}
-              width={width * 0.5}
-              height={width * 0.5}
-              margin={width * 0.05}
-              cover={width * 0.02}
-              selectionRaise={width * 0.01}
-            />
+              outerRadius={width * 0.2}
+              innerRadius={width * 0.19}
+              padAngle={0.05}>
+              <SVGText/>
+            </PieChart>
             <Divider style={styles.verticalDivider} />
             <View style={styles.progress}>
               {values.map(this.renderProgress)}
@@ -315,6 +321,7 @@ const useStyles = (theme, width) =>
     },
     pie: {
       width: width * 0.5,
+      height: width * 0.5,
     },
     divider: {
       width: '100%',
