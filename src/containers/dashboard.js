@@ -15,6 +15,7 @@ import {
   Portal,
   Dialog,
   RadioButton,
+  overlay,
 } from 'react-native-paper';
 import {PieChart} from 'react-native-svg-charts';
 import {Text as TextArt} from 'react-native-svg';
@@ -203,10 +204,14 @@ class Dashboard extends Component {
               </RadioButton.Group>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={this.hideSelectedDates}>
+              <Button
+                color={theme.colors.switch}
+                onPress={this.hideSelectedDates}>
                 {translationService.get('cancel')}
               </Button>
-              <Button onPress={this.updateSelectedDate}>
+              <Button
+                color={theme.colors.switch}
+                onPress={this.updateSelectedDate}>
                 {translationService.get('ok')}
               </Button>
             </Dialog.Actions>
@@ -245,6 +250,7 @@ class Dashboard extends Component {
   };
 
   renderReportChart = () => {
+    const {theme} = this.props;
     const dates = Object.keys(DashboardService.reports);
     const {selectedDate} = this.state;
     if (
@@ -262,12 +268,18 @@ class Dashboard extends Component {
         y: value[name],
       })),
     }));
+    const color =
+      theme.dark && theme.mode === 'adaptive'
+        ? overlay(4, theme.colors.surface)
+        : theme.colors.surface;
     return (
       <PureChart
         height={160}
         type="bar"
         data={reports}
         showEvenNumberXaxisLabel={false}
+        backgroundColor={color}
+        labelColor={theme.colors.text}
       />
     );
   };

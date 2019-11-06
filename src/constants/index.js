@@ -101,6 +101,7 @@ export const NAVIGATION_DASHBOARD = 'Dashboard';
 export const NAVIGATION_LOGIN = 'Login';
 
 export const LIGHT_PAPER_THEME = Object.assign({}, DefaultTheme, {
+  mode: 'adaptive',
   colors: Object.assign({}, DefaultTheme.colors, {
     primary: 'rgb(51,126,241)',
     element: DefaultTheme.colors.surface,
@@ -109,6 +110,7 @@ export const LIGHT_PAPER_THEME = Object.assign({}, DefaultTheme, {
 });
 
 export const DARK_PAPER_THEME = Object.assign({}, DarkTheme, {
+  mode: 'adaptive',
   colors: Object.assign({}, DarkTheme.colors, {
     primary: 'rgb(31,30,36)',
     element: DefaultTheme.colors.surface,
