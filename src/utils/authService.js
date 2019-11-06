@@ -42,7 +42,7 @@ class AuthService extends Service {
     let response;
     try {
       response = await Axios.post(
-        'https://api-test.hubert.com.br/token',
+        `${constants.BASE_URL}/token`,
         QS.stringify({
           grant_type: 'password',
           username,
@@ -79,7 +79,7 @@ class AuthService extends Service {
     Axios.defaults.headers.common.Authorization = `${this.data.tokenType} ${
       this.data.token
     }`;
-    Axios.defaults.baseURL = 'https://api-test.hubert.com.br/api';
+    Axios.defaults.baseURL = `${constants.BASE_URL}/api`;
     Axios.interceptors.response.use(null, e => {
       restart();
       return Promise.reject(e);

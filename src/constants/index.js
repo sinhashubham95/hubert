@@ -6,6 +6,8 @@ import DOC from '../assets/doc.png';
 export const LIGHT_THEME = 'light';
 export const DARK_THEME = 'dark';
 
+export const BASE_URL = 'https://api-test.hubert.com.br';
+
 export const LOGIN_FORM = [
   {
     key: 'username',
