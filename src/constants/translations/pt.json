@@ -12,13 +12,15 @@
     "darkTheme": "Tema Escuro",
     "darkThemeCaption": "Cor de fundo escura",
     "rentalStatus": "Situação",
-    "reportClosing": "Demonstrativo Por Depósito",
+    "reportClosing": "Demonstrativo",
     "dateSelector": "Selecionar",
     "cancel": "CANCELAR",
-    "ok": "Está bem",
     "neutral": "PERGUNTE-ME DEPOIS",
     "revenue": "Receita",
     "expense": "Despesa",
-    "income": "Resultado"
+    "income": "Resultado",
+    "name": "Imóvel",
+    "status": "Situação",
+    "tenant": "Inquilino"
   }
 }

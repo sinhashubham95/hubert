@@ -78,6 +78,17 @@ export const REPORTS_LIST = {
   income: 'rgb(252,148,77)',
 };
 
+export const REPORT_STATUS_LIST = {
+  'em dia': '#2CA185',
+  atrasado: '#8B0000',
+  rescindido: '#FFD700',
+  execução: '#0000CD',
+  despejo: '#D9534F',
+  suspenso: '#E6E9ED',
+  vago: '#F44336',
+  indisponível: '#2196F3',
+};
+
 export const DOCUMENT_FILE_LIST = {
   pdf: PDF,
   doc: DOC,

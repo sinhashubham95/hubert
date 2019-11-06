@@ -254,7 +254,16 @@ class Report extends Component {
     </DataTable.Title>
   );
 
-  renderPropertyData = (name, value) => {
+  renderPropertyData = (name, property) => {
+    const value = property[name];
+    if (name === 'status') {
+      const {theme} = this.props;
+      const color =
+        constants.REPORT_STATUS_LIST[property.contractStatus] ||
+        constants.REPORT_STATUS_LIST[property.propertyStatus] ||
+        theme.colors.text;
+      return <Text style={{color}}>{value}</Text>;
+    }
     if (constants.REPORTS_LIST[name]) {
       return <Text style={{color: constants.REPORTS_LIST[name]}}>{value}</Text>;
     }
@@ -263,7 +272,7 @@ class Report extends Component {
 
   renderPropertyCell = property => name => (
     <DataTable.Cell key={`property_cell_${property.code}_${name}`}>
-      {this.renderPropertyData(name, property[name])}
+      {this.renderPropertyData(name, property)}
     </DataTable.Cell>
   );
 
