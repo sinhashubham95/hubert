@@ -15,6 +15,7 @@ import {
   Portal,
   Dialog,
   RadioButton,
+  TouchableRipple,
   overlay,
 } from 'react-native-paper';
 import {PieChart} from 'react-native-svg-charts';
@@ -148,17 +149,25 @@ class Dashboard extends Component {
     />
   );
 
-  renderProgress = value => {
+  renderProgress = (value, index) => {
     const {theme} = this.props;
     const styles = useStyles(theme);
     return (
-      <View key={value.key} style={styles.bar}>
-        <View style={styles.barText}>
-          <Text>{value.title}</Text>
-          <Text>{value.count}</Text>
+      <TouchableRipple
+        style={styles.bar}
+        key={value.key}
+        onPress={() => this.onHighlightedIndexChange(index)}>
+        <View>
+          <View style={styles.barText}>
+            <Text>{value.title}</Text>
+            <Text>{value.count}</Text>
+          </View>
+          <ProgressBar
+            progress={value.percentage / 100.0}
+            color={value.color}
+          />
         </View>
-        <ProgressBar progress={value.percentage / 100.0} color={value.color} />
-      </View>
+      </TouchableRipple>
     );
   };
 
@@ -241,8 +250,10 @@ class Dashboard extends Component {
           styles.reportAmountTile,
           {backgroundColor: constants.REPORTS_LIST[name]},
         ]}>
-        <Text>{translationService.get(name)}</Text>
-        <Text>
+        <Text style={styles.reportAmountText}>
+          {translationService.get(name)}
+        </Text>
+        <Text style={styles.reportAmountText}>
           {formatCurrency(DashboardService.reports[selectedDate][name])}
         </Text>
       </View>
@@ -448,6 +459,9 @@ const useStyles = (theme, width) =>
       width: '100%',
       marginVertical: 16,
       paddingHorizontal: width * 0.04,
+    },
+    reportAmountText: {
+      color: theme.colors.element,
     },
   });
 

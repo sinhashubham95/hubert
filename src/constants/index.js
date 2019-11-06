@@ -73,7 +73,7 @@ export const DASHBOARD_STATUS_LIST = {
 export const REPORTS_LIST = {
   revenue: 'rgb(93,203,156)',
   expense: 'rgb(236,89,86)',
-  income: 'rgb(243,171,123)',
+  income: 'rgb(252,148,77)',
 };
 
 export const DOCUMENT_FILE_LIST = {

@@ -203,10 +203,14 @@ class Report extends Component {
               </RadioButton.Group>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={this.hideSelectedDates}>
+              <Button
+                color={theme.colors.switch}
+                onPress={this.hideSelectedDates}>
                 {translationService.get('cancel')}
               </Button>
-              <Button onPress={this.updateSelectedDate}>
+              <Button
+                color={theme.colors.switch}
+                onPress={this.updateSelectedDate}>
                 {translationService.get('ok')}
               </Button>
             </Dialog.Actions>
@@ -219,7 +223,7 @@ class Report extends Component {
   renderRefreshControl = () => (
     <RefreshControl
       refreshing={this.state.loading || !this.state.init}
-      onRefresh={this.fetchDatesWithLoading}
+      onRefresh={this.fetchDataWithLoading}
     />
   );
 
@@ -238,8 +242,8 @@ class Report extends Component {
           styles.amountTile,
           {backgroundColor: constants.REPORTS_LIST[name]},
         ]}>
-        <Text>{translationService.get(name)}</Text>
-        <Text>{reportService[name]}</Text>
+        <Text style={styles.amountText}>{translationService.get(name)}</Text>
+        <Text style={styles.amountText}>{reportService[name]}</Text>
       </View>
     );
   };
@@ -263,37 +267,42 @@ class Report extends Component {
     </DataTable.Cell>
   );
 
-  renderProperty = (property, index) => (
-    <View key={`property_${property.code}`}>
-      <DataTable.Row onPress={this.onPropertyClick(index)}>
-        {constants.REPORTS_TABLE_LIST.map(this.renderPropertyCell(property))}
-      </DataTable.Row>
-      <Portal>
-        <Dialog
-          visible={this.state.propertyExpand[index]}
-          onDismisss={this.onPropertyClick(index)}>
-          <Dialog.Title>{property.name}</Dialog.Title>
-          <DataTable>
-            <DataTable.Header>
-              {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                this.renderPropertyHeader,
-              )}
-            </DataTable.Header>
-            <DataTable.Row>
-              {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                this.renderPropertyCell(property),
-              )}
-            </DataTable.Row>
-          </DataTable>
-          <Dialog.Actions>
-            <Button onPress={this.onPropertyClick(index)}>
-              {translationService.get('ok')}
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </View>
-  );
+  renderProperty = (property, index) => {
+    const {theme} = this.props;
+    return (
+      <View key={`property_${property.code}`}>
+        <DataTable.Row onPress={this.onPropertyClick(index)}>
+          {constants.REPORTS_TABLE_LIST.map(this.renderPropertyCell(property))}
+        </DataTable.Row>
+        <Portal>
+          <Dialog
+            visible={this.state.propertyExpand[index]}
+            onDismisss={this.onPropertyClick(index)}>
+            <Dialog.Title>{property.name}</Dialog.Title>
+            <DataTable>
+              <DataTable.Header>
+                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
+                  this.renderPropertyHeader,
+                )}
+              </DataTable.Header>
+              <DataTable.Row>
+                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
+                  this.renderPropertyCell(property),
+                )}
+              </DataTable.Row>
+            </DataTable>
+            <Dialog.Actions>
+              <Button
+                color={theme.colors.switch}
+                onPress={this.onPropertyClick(index)}>
+                {translationService.get('ok')}
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+      </View>
+    );
+  };
 
   renderProperties = () => {
     const {properties} = reportService;
@@ -384,6 +393,9 @@ const useStyles = (theme, width) =>
     divider: {
       width: '100%',
       height: 2 * StyleSheet.hairlineWidth,
+    },
+    amountText: {
+      color: theme.colors.element,
     },
   });
 
