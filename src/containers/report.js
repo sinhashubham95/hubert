@@ -90,8 +90,8 @@ class Report extends Component {
       this.showError(e.message);
     }
     const dates = reportService.dates;
-    const selectedDate = dates.length ? dates[0] : '';
-    const radioDate = dates.length ? dates[0] : '';
+    const selectedDate = dates.length ? dates[dates.length - 1] : '';
+    const radioDate = dates.length ? dates[dates.length - 1] : '';
     if (selectedDate) {
       try {
         await reportService.initRentalDetails(clientCode, selectedDate);
@@ -117,8 +117,8 @@ class Report extends Component {
       this.showError(e.message);
     }
     const dates = reportService.dates;
-    const selectedDate = dates.length ? dates[0] : '';
-    const radioDate = dates.length ? dates[0] : '';
+    const selectedDate = dates.length ? dates[dates.length - 1] : '';
+    const radioDate = dates.length ? dates[dates.length - 1] : '';
     if (selectedDate) {
       try {
         await reportService.getRentalDetails(

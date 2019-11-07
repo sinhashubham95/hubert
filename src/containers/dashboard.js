@@ -86,10 +86,12 @@ class Dashboard extends Component {
       this.showError(e.message);
     }
     const dates = Object.keys(DashboardService.reports);
+    const selectedDate = dates.length ? dates[dates.length - 1] : '';
+    const radioDate = dates.length ? dates[dates.length - 1] : '';
     this.setState({
       init: true,
-      selectedDate: dates[0] || '',
-      radioDate: dates[0] || '',
+      selectedDate,
+      radioDate,
       highlightedIndex: 0,
     });
   };
@@ -106,10 +108,12 @@ class Dashboard extends Component {
       this.showError(e.message);
     }
     const dates = Object.keys(DashboardService.reports);
+    const selectedDate = dates.length ? dates[dates.length - 1] : '';
+    const radioDate = dates.length ? dates[dates.length - 1] : '';
     this.setState({
       loading: false,
-      selectedDate: dates[0] || '',
-      radioDate: dates[0] || '',
+      selectedDate,
+      radioDate,
       highlightedIndex: 0,
     });
   };
