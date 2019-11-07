@@ -8,6 +8,7 @@ import {
   Text,
   Divider,
   DataTable,
+  Caption,
 } from 'react-native-paper';
 import {
   ScrollView,
@@ -17,8 +18,10 @@ import {
   RefreshControl,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
-import momemt from 'moment';
+import Moment from 'moment';
+import Color from 'color';
 
+import Cell from '../components/cell';
 import Button from '../components/button';
 import Icon from '../components/icon';
 
@@ -90,8 +93,8 @@ class Report extends Component {
       this.showError(e.message);
     }
     const dates = reportService.dates;
-    const selectedDate = dates.length ? dates[dates.length - 1] : '';
-    const radioDate = dates.length ? dates[dates.length - 1] : '';
+    const selectedDate = dates.length ? dates[0] : '';
+    const radioDate = dates.length ? dates[0] : '';
     if (selectedDate) {
       try {
         await reportService.initRentalDetails(clientCode, selectedDate);
@@ -117,8 +120,8 @@ class Report extends Component {
       this.showError(e.message);
     }
     const dates = reportService.dates;
-    const selectedDate = dates.length ? dates[dates.length - 1] : '';
-    const radioDate = dates.length ? dates[dates.length - 1] : '';
+    const selectedDate = dates.length ? dates[0] : '';
+    const radioDate = dates.length ? dates[0] : '';
     if (selectedDate) {
       try {
         await reportService.getRentalDetails(
@@ -146,7 +149,7 @@ class Report extends Component {
     });
   };
 
-  formatDate = date => momemt(date).format('DD/MM/YYYY');
+  formatDate = date => Moment(date).format('DD/MM/YYYY');
 
   showSelectedDates = () => {
     this.setState({showSelectedDates: true});
@@ -271,10 +274,28 @@ class Report extends Component {
   };
 
   renderPropertyCell = property => name => (
-    <DataTable.Cell key={`property_cell_${property.code}_${name}`}>
+    <Cell key={`property_cell_${property.code}_${name}`}>
       {this.renderPropertyData(name, property)}
-    </DataTable.Cell>
+    </Cell>
   );
+
+  renderExtendedProperty = property => name => {
+    const {theme} = this.props;
+    const width = Dimensions.get('window');
+    const styles = useStyles(theme, width);
+    const color =
+      constants.REPORTS_LIST[name] ||
+      Color(theme.colors.text)
+        .alpha(0.54)
+        .rgb()
+        .string();
+    return (
+      <View style={styles.extendedProperty} key={`${property.code}_${name}`}>
+        <Text>{translationService.get(name)}</Text>
+        <Caption style={{color}}>{property[name]}</Caption>
+      </View>
+    );
+  };
 
   renderProperty = (property, index) => {
     const {theme} = this.props;
@@ -288,18 +309,11 @@ class Report extends Component {
             visible={this.state.propertyExpand[index]}
             onDismisss={this.onPropertyClick(index)}>
             <Dialog.Title>{property.name}</Dialog.Title>
-            <DataTable>
-              <DataTable.Header>
-                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                  this.renderPropertyHeader,
-                )}
-              </DataTable.Header>
-              <DataTable.Row>
-                {constants.REPORTS_TABLE_EXTENDED_LIST.map(
-                  this.renderPropertyCell(property),
-                )}
-              </DataTable.Row>
-            </DataTable>
+            <Dialog.Content>
+              {constants.REPORTS_TABLE_EXTENDED_LIST.map(
+                this.renderExtendedProperty(property),
+              )}
+            </Dialog.Content>
             <Dialog.Actions>
               <Button
                 color={theme.colors.switch}
@@ -405,6 +419,9 @@ const useStyles = (theme, width) =>
     },
     amountText: {
       color: theme.colors.element,
+    },
+    extendedProperty: {
+      marginBottom: 8,
     },
   });
 
