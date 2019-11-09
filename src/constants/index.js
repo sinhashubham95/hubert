@@ -61,24 +61,7 @@ export const SIDE_MENU_BUTTONS = [
   },
 ];
 
-export const DASHBOARD_STATUS_LIST = {
-  'Em Dia': '#2CA185',
-  Atrasado: '#8B0000',
-  Rescindido: '#FFD700',
-  Execução: '#0000CD',
-  Despejo: '#D9534F',
-  Suspenso: '#E6E9ED',
-  Vago: '#F44336',
-  Indisponível: '#2196F3',
-};
-
-export const REPORTS_LIST = {
-  revenue: 'rgb(93,203,156)',
-  expense: 'rgb(236,89,86)',
-  income: 'rgb(252,148,77)',
-};
-
-export const REPORT_STATUS_LIST = {
+export const STATUS_LIST = {
   'em dia': '#2CA185',
   atrasado: '#8B0000',
   rescindido: '#FFD700',
@@ -87,6 +70,12 @@ export const REPORT_STATUS_LIST = {
   suspenso: '#E6E9ED',
   vago: '#F44336',
   indisponível: '#2196F3',
+};
+
+export const REPORTS_LIST = {
+  revenue: 'rgb(93,203,156)',
+  expense: 'rgb(236,89,86)',
+  income: 'rgb(252,148,77)',
 };
 
 export const DOCUMENT_FILE_LIST = {

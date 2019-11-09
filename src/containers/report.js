@@ -262,8 +262,8 @@ class Report extends Component {
     if (name === 'status') {
       const {theme} = this.props;
       const color =
-        constants.REPORT_STATUS_LIST[property.contractStatus] ||
-        constants.REPORT_STATUS_LIST[property.propertyStatus] ||
+        constants.STATUS_LIST[property.contractStatus] ||
+        constants.STATUS_LIST[property.propertyStatus] ||
         theme.colors.text;
       return <Text style={{color}}>{value}</Text>;
     }
@@ -382,14 +382,14 @@ const useStyles = (theme, width) =>
       alignItems: 'center',
     },
     headerTitle: {
-      width: width * 0.6,
+      width: width * 0.55,
       marginRight: width * 0.05,
     },
     headerTitleDetails: {
       fontSize: 16,
     },
     dateSelector: {
-      width: width * 0.3,
+      width: width * 0.35,
       marginRight: width * 0.05,
     },
     dateRadio: {

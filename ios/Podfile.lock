@@ -20,6 +20,8 @@ PODS:
     - glog
   - glog (0.3.5)
   - RCTRequired (0.61.2)
+  - RCTRestart (0.0.13):
+    - React
   - RCTTypeSafety (0.61.2):
     - FBLazyVector (= 0.61.2)
     - Folly (= 2018.10.22.00)
@@ -221,6 +223,8 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
     - ReactCommon/jscallinvoker (= 0.61.2)
+  - ReactNativeART (1.0.2):
+    - React
   - rn-fetch-blob (0.11.2):
     - React-Core
   - RNCAsyncStorage (1.6.2):
@@ -233,6 +237,8 @@ PODS:
     - React
   - RNSnackbar (2.0.3):
     - React
+  - RNSVG (9.13.3):
+    - React
   - RNVectorIcons (6.6.0):
     - React
   - Yoga (1.14.0)
@@ -244,6 +250,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
+  - RCTRestart (from `../node_modules/react-native-restart/ios`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
   - React-Core (from `../node_modules/react-native/`)
@@ -267,12 +274,14 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSnackbar (from `../node_modules/react-native-snackbar`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -293,6 +302,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
+  RCTRestart:
+    :path: "../node_modules/react-native-restart/ios"
   RCTTypeSafety:
     :path: "../node_modules/react-native/Libraries/TypeSafety"
   React:
@@ -333,6 +344,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeART:
+    :path: "../node_modules/@react-native-community/art"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
@@ -345,6 +358,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSnackbar:
     :path: "../node_modules/react-native-snackbar"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -358,6 +373,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   RCTRequired: c639d59ed389cfb1f1203f65c2ea946d8ec586e2
+  RCTRestart: dd19aab87fc1118e05b6b5b91b959105647f56b4
   RCTTypeSafety: dc23fb655d6c77667c78e327bf661bc11e3b8aec
   React: 7e586e5d7bec12b91c1a096826b0fc9ab1da7865
   React-Core: 8ddb9770b4a30a6ab4a754e6ed5ec76454e3d699
@@ -378,15 +394,17 @@ SPEC CHECKSUMS:
   React-RCTText: e3ef6191cdb627855ff7fe8fa0c1e14094967fb8
   React-RCTVibration: fb54c732fd20405a76598e431aa2f8c2bf527de9
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
+  ReactNativeART: 103929e284be663b5a2f921ed912821f04120a70
   rn-fetch-blob: f525a73a78df9ed5d35e67ea65e79d53c15255bc
   RNCAsyncStorage: 60a80e72d95bf02a01cace55d3697d9724f0d77f
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNReanimated: 6abbbae2e5e72609d85aabd92a982a94566885f1
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNSnackbar: 5ce7c6c100fde59068e9135397760d7cee299c2a
+  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
-PODFILE CHECKSUM: 30f83cb6309088051e4d5e9e2818bb1cc70a1e7e
+PODFILE CHECKSUM: 716a0a97d1d119cfbbf63fda97166f6dc20f6244
 
 COCOAPODS: 1.6.1

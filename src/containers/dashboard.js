@@ -431,11 +431,11 @@ const useStyles = (theme, width) =>
       alignItems: 'center',
     },
     reportHeaderTitle: {
-      width: width * 0.6,
+      width: width * 0.55,
       marginRight: width * 0.05,
     },
     reportDateSelector: {
-      width: width * 0.3,
+      width: width * 0.35,
       marginRight: width * 0.05,
     },
     reportDateRadio: {

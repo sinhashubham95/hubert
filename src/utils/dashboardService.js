@@ -55,6 +55,16 @@ class DashboardService {
       this.__data[keys[i]].percentage = this.__data[keys[i]].value =
         (this.__data[keys[i]].count * 100.0) / total;
     }
+    let sortedData = {};
+    if (this.__data['em dia']) {
+      sortedData['em dia'] = this.__data['em dia'];
+    }
+    keys.map(key => {
+      if (key !== 'em dia') {
+        sortedData[key] = this.__data[key];
+      }
+    });
+    this.__data = sortedData;
     const values = responses[2].data.Dados.Valores;
     for (let i = 0; i < values.length; i += 1) {
       this.__reports[values[i].DataDeposito] = {
@@ -93,16 +103,17 @@ class DashboardService {
 
   __process(values) {
     for (let i = 0; i < values.length; i += 1) {
-      const status = values[i].Situacao || values[i].SituacaoContrato;
+      let status = values[i].Situacao || values[i].SituacaoContrato;
       if (
-        constants.DASHBOARD_STATUS_LIST[status] &&
-        !this.__data[status] &&
+        status &&
+        constants.STATUS_LIST[status.toLowerCase()] &&
+        !this.__data[status.toLowerCase()] &&
         values[i].Quantidade
       ) {
-        this.__data[status] = {
-          status: status,
+        this.__data[status.toLowerCase()] = {
+          status,
           color:
-            values[i].CorGrafico || constants.DASHBOARD_STATUS_LIST[status],
+            values[i].CorGrafico || constants.STATUS_LIST[status.toLowerCase()],
           count: values[i].Quantidade,
           title: status,
           key: `pie-${i}`,

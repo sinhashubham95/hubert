@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, SafeAreaView} from 'react-native';
 import Snackbar from 'react-native-snackbar';
 
 import {
@@ -79,6 +79,7 @@ class SideMenu extends Component {
     }
     (async () => {
       try {
+        this.onThemeChange(false);
         await AuthService.clear(key);
         this.props.navigation.navigate(constants.NAVIGATION_LOGIN);
         await localStorageService.clearAll();
@@ -137,39 +138,41 @@ class SideMenu extends Component {
     }
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Avatar.Image
-            source={{uri: UserInformationService.data.profilePhoto}}
-            style={styles.photo}
-          />
-          <Headline>{UserInformationService.data.name}</Headline>
-        </View>
-        <View style={styles.buttons}>
-          {constants.SIDE_MENU_BUTTONS.map(this.renderButton)}
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.selections}>
-          <List.Accordion
-            title={client}
-            description={translationService.get('clientCode')}
-            expanded={showClients}
-            onPress={this.onShowClients}>
-            {UserInformationService.data.clients.map(this.renderClient)}
-          </List.Accordion>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.switch}>
-          <View style={styles.switchDetails}>
-            <Title>{translationService.get('darkTheme')}</Title>
-            <Caption>{translationService.get('darkThemeCaption')}</Caption>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <Avatar.Image
+              source={{uri: UserInformationService.data.profilePhoto}}
+              style={styles.photo}
+            />
+            <Headline>{UserInformationService.data.name}</Headline>
           </View>
-          <Switch
-            value={screenProps.darkTheme}
-            onValueChange={this.onThemeChange}
-            color={theme.colors.switch}
-          />
-        </View>
-        <Divider style={styles.divider} />
+          <View style={styles.buttons}>
+            {constants.SIDE_MENU_BUTTONS.map(this.renderButton)}
+          </View>
+          <Divider style={styles.divider} />
+          <View style={styles.selections}>
+            <List.Accordion
+              title={client}
+              description={translationService.get('clientCode')}
+              expanded={showClients}
+              onPress={this.onShowClients}>
+              {UserInformationService.data.clients.map(this.renderClient)}
+            </List.Accordion>
+          </View>
+          <Divider style={styles.divider} />
+          <View style={styles.switch}>
+            <View style={styles.switchDetails}>
+              <Title>{translationService.get('darkTheme')}</Title>
+              <Caption>{translationService.get('darkThemeCaption')}</Caption>
+            </View>
+            <Switch
+              value={screenProps.darkTheme}
+              onValueChange={this.onThemeChange}
+              color={theme.colors.switch}
+            />
+          </View>
+          <Divider style={styles.divider} />
+        </SafeAreaView>
       </View>
     );
   }
