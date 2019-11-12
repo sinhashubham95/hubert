@@ -81,7 +81,9 @@ class AuthService extends Service {
     }`;
     Axios.defaults.baseURL = `${constants.BASE_URL}/api`;
     Axios.interceptors.response.use(null, e => {
-      restart();
+      if (e.status === 401) {
+        restart();
+      }
       return Promise.reject(e);
     });
   }

@@ -42,6 +42,7 @@ class Report extends Component {
       loading: false,
       init: false,
       selectedDate: '',
+      clientDate: '',
       radioDate: '',
       showSelectedDates: false,
       propertyExpand: [],
@@ -55,13 +56,18 @@ class Report extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!prevState.init && this.state.init) {
-      this.fetchDataWithLoading();
-    }
     if (
+      (!prevState.init && this.state.init) ||
       prevProps.screenProps.clientCode !== this.props.screenProps.clientCode
     ) {
       this.fetchDataWithLoading();
+      return;
+    }
+    if (
+      prevState.clientDate !== this.state.clientDate ||
+      (reportService.properties.length === 0 && !this.state.loading)
+    ) {
+      this.fetchRentalDetailsWithLoading();
     }
   }
 
@@ -81,7 +87,7 @@ class Report extends Component {
       })();
       return;
     }
-    this.setState({loading: true}, this.fetchData);
+    this.fetchDatesWithLoading(this.fetchRentalDetailsWithLoading);
   };
 
   fetchCachedData = async () => {
@@ -94,6 +100,7 @@ class Report extends Component {
     }
     const dates = reportService.dates;
     const selectedDate = dates.length ? dates[0] : '';
+    const clientDate = `${clientCode}/${selectedDate}`;
     const radioDate = dates.length ? dates[0] : '';
     if (selectedDate) {
       try {
@@ -106,14 +113,19 @@ class Report extends Component {
     this.setState({
       init: true,
       selectedDate,
+      clientDate,
       radioDate,
       showSelectedDates: false,
       propertyExpand: properties.map(() => false),
     });
   };
 
-  fetchData = async () => {
+  fetchDatesWithLoading = cb =>
+    this.setState({loading: true}, this.fetchDates(cb));
+
+  fetchDates = (cb = () => true) => async () => {
     const {screenProps} = this.props;
+    const {clientCode} = screenProps;
     try {
       await reportService.getDates(screenProps.clientCode);
     } catch (e) {
@@ -121,22 +133,42 @@ class Report extends Component {
     }
     const dates = reportService.dates;
     const selectedDate = dates.length ? dates[0] : '';
+    const clientDate = `${clientCode}/${selectedDate}`;
     const radioDate = dates.length ? dates[0] : '';
     if (selectedDate) {
-      try {
-        await reportService.getRentalDetails(
-          screenProps.clientCode,
-          selectedDate,
-        );
-      } catch (e) {
-        this.showError(e.message);
+      if (clientDate !== this.state.clientDate) {
+        cb = () => true;
       }
+      this.setState(
+        {
+          loading: false,
+          selectedDate,
+          clientDate,
+          radioDate,
+          showSelectedDates: false,
+        },
+        cb,
+      );
+    }
+  };
+
+  fetchRentalDetailsWithLoading = () =>
+    this.setState({loading: true}, this.fetchRentalDetails);
+
+  fetchRentalDetails = async () => {
+    const {screenProps} = this.props;
+    const {selectedDate} = this.state;
+    try {
+      await reportService.getRentalDetails(
+        screenProps.clientCode,
+        selectedDate,
+      );
+    } catch (e) {
+      this.showError(e.message);
     }
     const {properties} = reportService;
     this.setState({
       loading: false,
-      selectedDate,
-      radioDate,
       showSelectedDates: false,
       propertyExpand: properties.map(() => false),
     });
@@ -160,9 +192,12 @@ class Report extends Component {
   };
 
   updateSelectedDate = () => {
+    const {screenProps} = this.props;
+    const {clientCode} = screenProps;
     if (this.state.radioDate !== this.state.selectedDate) {
       this.setState({
         selectedDate: this.state.radioDate,
+        clientDate: `${clientCode}/${this.state.radioDate}`,
         showSelectedDates: false,
       });
     } else {
@@ -300,7 +335,7 @@ class Report extends Component {
   renderProperty = (property, index) => {
     const {theme} = this.props;
     return (
-      <View key={`property_${property.code}`}>
+      <View key={`property_${property.code}_${index}`}>
         <DataTable.Row onPress={this.onPropertyClick(index)}>
           {constants.REPORTS_TABLE_LIST.map(this.renderPropertyCell(property))}
         </DataTable.Row>

@@ -122,8 +122,12 @@ class ReportService {
       contractDate: momemt(res.data.Dados.Imovel.ValidadeContrato).format(
         'DD/MM/YYYY',
       ),
-      contractStatus: res.data.Dados.Imovel.SituacaoContrato.toLowerCase(),
-      propertyStatus: res.data.Dados.Imovel.Situacao.toLowerCase(),
+      contractStatus: res.data.Dados.Imovel.SituacaoContrato
+        ? res.data.Dados.Imovel.SituacaoContrato.toLowerCase()
+        : '',
+      propertyStatus: res.data.Dados.Imovel.Situacao
+        ? res.data.Dados.Imovel.Situacao.toLowerCase()
+        : '',
       expense: formatCurrency(
         response.data.Dados.Prestacoes[0].Imoveis[ind].TotalDebito,
       ),
