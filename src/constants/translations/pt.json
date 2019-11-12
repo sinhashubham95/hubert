@@ -21,6 +21,7 @@
     "income": "Resultado",
     "name": "Imóvel",
     "status": "Situação",
-    "tenant": "Inquilino"
+    "tenant": "Inquilino",
+    "contractDate": "Validade do Contrato"
   }
 }

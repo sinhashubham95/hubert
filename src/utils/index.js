@@ -3,11 +3,8 @@ import authService from './authService';
 import localStorageService from './localStorageService';
 
 export const formatCurrency = value => {
-  let split = `${value}`.split('.');
+  let split = `${value.toFixed(2)}`.split('.');
   let [l, r] = split;
-  if (!r) {
-    r = '0';
-  }
   const lLength = l.length;
   let fl = '';
   for (let i = 0; i < lLength; i += 1) {
