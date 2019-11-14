@@ -116,7 +116,7 @@ class DashboardService {
             values[i].CorGrafico || constants.STATUS_LIST[status.toLowerCase()],
           count: values[i].Quantidade,
           title: status,
-          key: `pie-${i}`,
+          key: status,
         };
       }
     }
