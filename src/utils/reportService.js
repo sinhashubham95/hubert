@@ -88,7 +88,7 @@ class ReportService {
     response.data.Dados.Prestacoes[0].Imoveis.map(value => {
       propertyDetails.push(
         Axios.get(
-          `/Locacao/Imovel?CodProprietario=228&CodImovel=${
+          `/Locacao/Imovel?CodProprietario=${clientCode}&CodImovel=${
             value.Imovel.CodImovel
           }`,
         ),
@@ -111,7 +111,19 @@ class ReportService {
     }
     this.__properties = responses.map((res, ind) => ({
       code: res.data.Dados.Imovel.CodImovel,
-      name: res.data.Dados.Imovel.NomeImovel,
+      name:
+        !response.data.Dados.Prestacoes[0].Imoveis[ind].Imovel.NomeImovel ||
+        response.data.Dados.Prestacoes[0].Imoveis[
+          ind
+        ].Imovel.NomeImovel.toLowerCase().indexOf(
+          response.data.Dados.Prestacoes[0].Imoveis[
+            ind
+          ].Imovel.Unidade.toLowerCase(),
+        ) !== -1
+          ? response.data.Dados.Prestacoes[0].Imoveis[ind].Imovel.NomeImovel
+          : `${
+              response.data.Dados.Prestacoes[0].Imoveis[ind].Imovel.NomeImovel
+            }${response.data.Dados.Prestacoes[0].Imoveis[ind].Imovel.Unidade}`,
       status:
         res.data.Dados.Imovel.Situacao === 'ALUGADO'
           ? `${res.data.Dados.Imovel.Situacao} ${

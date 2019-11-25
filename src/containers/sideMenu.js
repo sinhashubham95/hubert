@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
+import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import Snackbar from 'react-native-snackbar';
 
 import {
@@ -137,7 +137,7 @@ class SideMenu extends Component {
       );
     }
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
             <Avatar.Image
@@ -173,7 +173,7 @@ class SideMenu extends Component {
           </View>
           <Divider style={styles.divider} />
         </SafeAreaView>
-      </View>
+      </ScrollView>
     );
   }
 }
