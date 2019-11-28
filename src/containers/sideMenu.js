@@ -129,6 +129,7 @@ class SideMenu extends Component {
   render() {
     const {theme, screenProps} = this.props;
     const {client, loading, showClients} = this.state;
+    const height = showClients ? 300 : 64;
     if (loading) {
       return (
         <View style={styles.container}>
@@ -150,15 +151,20 @@ class SideMenu extends Component {
             {constants.SIDE_MENU_BUTTONS.map(this.renderButton)}
           </View>
           <Divider style={styles.divider} />
-          <View style={styles.selections}>
+          <List.Section style={[styles.selections, {maxHeight: height}]}>
             <List.Accordion
               title={client}
               description={translationService.get('clientCode')}
               expanded={showClients}
               onPress={this.onShowClients}>
-              {UserInformationService.data.clients.map(this.renderClient)}
+              <ScrollView
+                scrollEnabled={showClients}
+                showsVerticalScrollIndicator={false}
+                style={{maxHeight: height - 96}}>
+                {UserInformationService.data.clients.map(this.renderClient)}
+              </ScrollView>
             </List.Accordion>
-          </View>
+          </List.Section>
           <Divider style={styles.divider} />
           <View style={styles.switch}>
             <View style={styles.switchDetails}>

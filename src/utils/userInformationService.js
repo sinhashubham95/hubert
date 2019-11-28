@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 import Service from './service';
 import * as constants from '../constants';
-import translationService from "./translationService";
+import translationService from './translationService';
 
 class UserInformationService extends Service {
   constructor() {
@@ -35,7 +35,15 @@ class UserInformationService extends Service {
     ) {
       throw new Error(translationService.get('userInformationError'));
     }
-    const clients = responses[1].data.Dados || [];
+    let clients = responses[1].data.Dados || [];
+    for (let i = 0; i < 10; i += 1) {
+      clients.push(
+        Object.assign({}, clients[0], {
+          CodProprietario: `${clients[0].CodProprietario}_${i}`,
+        }),
+      );
+    }
+    console.log(clients);
     await (this.data = {
       name: responses[0].data.Dados.NomeUsuario,
       email: responses[0].data.Dados.Email,
