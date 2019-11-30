@@ -35,15 +35,7 @@ class UserInformationService extends Service {
     ) {
       throw new Error(translationService.get('userInformationError'));
     }
-    let clients = responses[1].data.Dados || [];
-    for (let i = 0; i < 10; i += 1) {
-      clients.push(
-        Object.assign({}, clients[0], {
-          CodProprietario: `${clients[0].CodProprietario}_${i}`,
-        }),
-      );
-    }
-    console.log(clients);
+    const clients = responses[1].data.Dados || [];
     await (this.data = {
       name: responses[0].data.Dados.NomeUsuario,
       email: responses[0].data.Dados.Email,
